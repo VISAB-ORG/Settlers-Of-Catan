@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="CBRS_Siedler" author="" >
+<exp obj="Status" type="Concept" >
+  <desc>
+                                      </desc>
+</exp>
+<exp obj="villagePlacesAvailable" c="Status" type="AttributeDesc" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="villagePlacesActive" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="roadPlacesAvailable" c="Status" type="AttributeDesc" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="roadPlacesActive" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="isAbledToEndTurn" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="isAllowedToRollDice" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="cityPlacesAvailable" c="Status" type="AttributeDesc" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="cityPlacesActive" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="hasLongestRoad" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="preference" c="Status" type="AttributeDesc" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="isAbledToBuildCity" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="isAbledToBuildRoad" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="isFirstTurn" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="hasFreeBuild" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;        </desc>
+</exp>
+<exp obj="hasFreeBuildRoad" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;        </desc>
+</exp>
+<exp obj="plan" c="Status" type="AttributeDesc" >
+  <desc>
+                                  </desc>
+</exp>
+<exp obj="isAbledToBuildVillage" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+<exp obj="isSecondTurn" c="Status" type="AttributeDesc" >
+  <desc>
+          </desc>
+</exp>
+</Project>
