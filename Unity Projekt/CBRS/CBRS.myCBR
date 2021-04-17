@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="CBRS" author="" >
+<svs>
+  <sv name="_unknown_"/>
+  <sv name="_undefined_"/>
+  <sv name="_others_"/>
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="_unknown_">
+</qsym>
+<qsym name="_undefined_">
+</qsym>
+<qsym name="_others_">
+</qsym>
+</fct>
+</svs>
+<model>
+  <concept name="Status">
+    <desc name="isWeaponNeeded" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="distanceToCover" type="Symbol" mult="false" >
+      <symbol value="middle" />
+      <symbol value="near" />
+      <symbol value="far" />
+      <symbol value="unknown" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="middle">
+<csym name="near" sim="0.7"/>
+<csym name="far" sim="0.7"/>
+</qsym>
+<qsym name="near">
+<csym name="middle" sim="0.7"/>
+<csym name="far" sim="0.2"/>
+</qsym>
+<qsym name="far">
+<csym name="middle" sim="0.7"/>
+<csym name="near" sim="0.2"/>
+</qsym>
+<qsym name="unknown">
+</qsym>
+</fct>
+    </desc>
+    <desc name="isEnemyAlive" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="winChance" type="Symbol" mult="false" >
+      <symbol value="winning" />
+      <symbol value="equal" />
+      <symbol value="loosing" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="winning">
+<csym name="equal" sim="0.7"/>
+</qsym>
+<qsym name="equal">
+<csym name="winning" sim="0.7"/>
+</qsym>
+<qsym name="loosing">
+</qsym>
+</fct>
+    </desc>
+    <desc name="equippedWeapon" type="Symbol" mult="false" >
+      <symbol value="Pistol" />
+      <symbol value="Machine Gun" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="Pistol">
+</qsym>
+<qsym name="Machine Gun">
+</qsym>
+</fct>
+    </desc>
+    <desc name="currentOverallAmmunition" type="Symbol" mult="false" >
+      <symbol value="few" />
+      <symbol value="middle" />
+      <symbol value="much" />
+      <symbol value="full" />
+      <symbol value="empty" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="few">
+<csym name="middle" sim="0.6"/>
+<csym name="much" sim="0.3"/>
+<csym name="full" sim="0.1"/>
+<csym name="empty" sim="0.7"/>
+</qsym>
+<qsym name="middle">
+<csym name="few" sim="0.6"/>
+<csym name="much" sim="0.7"/>
+<csym name="full" sim="0.5"/>
+<csym name="empty" sim="0.3"/>
+</qsym>
+<qsym name="much">
+<csym name="few" sim="0.3"/>
+<csym name="middle" sim="0.7"/>
+<csym name="full" sim="0.8"/>
+<csym name="empty" sim="0.1"/>
+</qsym>
+<qsym name="full">
+<csym name="few" sim="0.1"/>
+<csym name="middle" sim="0.5"/>
+<csym name="much" sim="0.8"/>
+</qsym>
+<qsym name="empty">
+<csym name="few" sim="0.7"/>
+<csym name="middle" sim="0.3"/>
+<csym name="much" sim="0.1"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="distanceToHealth" type="Symbol" mult="false" >
+      <symbol value="middle" />
+      <symbol value="near" />
+      <symbol value="far" />
+      <symbol value="unknown" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="middle">
+<csym name="near" sim="0.7"/>
+<csym name="far" sim="0.7"/>
+</qsym>
+<qsym name="near">
+<csym name="middle" sim="0.7"/>
+<csym name="far" sim="0.2"/>
+</qsym>
+<qsym name="far">
+<csym name="middle" sim="0.7"/>
+<csym name="near" sim="0.2"/>
+</qsym>
+<qsym name="unknown">
+</qsym>
+</fct>
+    </desc>
+    <desc name="isAmmunitionNeeded" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="quality" type="Integer" min="-1000" max="1000" mult="false" >
+      <fct name="default function" type="Integer" ltype="CONSTANT" lparam="1.0" rtype="CONSTANT" rparam="1.0" mode="DIFFERENCE" symm="true" mt="PARTNER_QUERY" r="REUSE" t="MAX" />
+    </desc>
+    <desc name="distanceToWeapon" type="Symbol" mult="false" >
+      <symbol value="near" />
+      <symbol value="middle" />
+      <symbol value="far" />
+      <symbol value="unknown" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="near">
+<csym name="middle" sim="0.7"/>
+<csym name="far" sim="0.2"/>
+</qsym>
+<qsym name="middle">
+<csym name="near" sim="0.7"/>
+<csym name="far" sim="0.7"/>
+</qsym>
+<qsym name="far">
+<csym name="near" sim="0.2"/>
+<csym name="middle" sim="0.7"/>
+</qsym>
+<qsym name="unknown">
+</qsym>
+</fct>
+    </desc>
+    <desc name="upTime" type="Symbol" mult="false" >
+      <symbol value="equal" />
+      <symbol value="longer" />
+      <symbol value="shorter" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="equal">
+<csym name="longer" sim="0.25"/>
+<csym name="shorter" sim="0.25"/>
+</qsym>
+<qsym name="longer">
+<csym name="equal" sim="0.25"/>
+</qsym>
+<qsym name="shorter">
+<csym name="equal" sim="0.25"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="currentAmmunation" type="Symbol" mult="false" >
+      <symbol value="few" />
+      <symbol value="middle" />
+      <symbol value="much" />
+      <symbol value="full" />
+      <symbol value="empty" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="few">
+<csym name="middle" sim="0.6"/>
+<csym name="much" sim="0.3"/>
+<csym name="full" sim="0.1"/>
+<csym name="empty" sim="0.7"/>
+</qsym>
+<qsym name="middle">
+<csym name="few" sim="0.6"/>
+<csym name="much" sim="0.7"/>
+<csym name="full" sim="0.5"/>
+<csym name="empty" sim="0.3"/>
+</qsym>
+<qsym name="much">
+<csym name="few" sim="0.3"/>
+<csym name="middle" sim="0.7"/>
+<csym name="full" sim="0.8"/>
+<csym name="empty" sim="0.1"/>
+</qsym>
+<qsym name="full">
+<csym name="few" sim="0.1"/>
+<csym name="middle" sim="0.5"/>
+<csym name="much" sim="0.8"/>
+</qsym>
+<qsym name="empty">
+<csym name="few" sim="0.7"/>
+<csym name="middle" sim="0.3"/>
+<csym name="much" sim="0.1"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="distanceToAmmunition" type="Symbol" mult="false" >
+      <symbol value="middle" />
+      <symbol value="near" />
+      <symbol value="far" />
+      <symbol value="unknown" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="middle">
+<csym name="near" sim="0.7"/>
+<csym name="far" sim="0.7"/>
+</qsym>
+<qsym name="near">
+<csym name="middle" sim="0.7"/>
+<csym name="far" sim="0.2"/>
+</qsym>
+<qsym name="far">
+<csym name="middle" sim="0.7"/>
+<csym name="near" sim="0.2"/>
+</qsym>
+<qsym name="unknown">
+</qsym>
+</fct>
+    </desc>
+    <desc name="distanceToEnemy" type="Symbol" mult="false" >
+      <symbol value="near" />
+      <symbol value="middle" />
+      <symbol value="far" />
+      <symbol value="unknown" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="near">
+<csym name="middle" sim="0.7"/>
+<csym name="far" sim="0.2"/>
+</qsym>
+<qsym name="middle">
+<csym name="near" sim="0.7"/>
+<csym name="far" sim="0.7"/>
+</qsym>
+<qsym name="far">
+<csym name="near" sim="0.2"/>
+<csym name="middle" sim="0.7"/>
+</qsym>
+<qsym name="unknown">
+</qsym>
+</fct>
+    </desc>
+    <desc name="lastPosition" type="Symbol" mult="false" >
+      <symbol value="near" />
+      <symbol value="middle" />
+      <symbol value="far" />
+      <symbol value="unknown" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="near">
+<csym name="middle" sim="0.7"/>
+<csym name="far" sim="0.2"/>
+</qsym>
+<qsym name="middle">
+<csym name="near" sim="0.7"/>
+<csym name="far" sim="0.7"/>
+</qsym>
+<qsym name="far">
+<csym name="near" sim="0.2"/>
+<csym name="middle" sim="0.7"/>
+</qsym>
+<qsym name="unknown">
+</qsym>
+</fct>
+    </desc>
+    <desc name="isEnemyVisible" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="isHealthNeeded" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="killDeathRatio" type="Symbol" mult="false" >
+      <symbol value="equal" />
+      <symbol value="negative" />
+      <symbol value="positive" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="equal">
+<csym name="negative" sim="0.5"/>
+<csym name="positive" sim="0.5"/>
+</qsym>
+<qsym name="negative">
+<csym name="equal" sim="0.5"/>
+</qsym>
+<qsym name="positive">
+<csym name="equal" sim="0.5"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="isCoverNeeded" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="ownHealth" type="Symbol" mult="false" >
+      <symbol value="few" />
+      <symbol value="middle" />
+      <symbol value="critical" />
+      <symbol value="much" />
+      <symbol value="full" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="few">
+<csym name="middle" sim="0.7"/>
+<csym name="critical" sim="0.8"/>
+<csym name="much" sim="0.3"/>
+<csym name="full" sim="0.1"/>
+</qsym>
+<qsym name="middle">
+<csym name="few" sim="0.7"/>
+<csym name="critical" sim="0.3"/>
+<csym name="much" sim="0.7"/>
+<csym name="full" sim="0.4"/>
+</qsym>
+<qsym name="critical">
+<csym name="few" sim="0.8"/>
+<csym name="middle" sim="0.3"/>
+<csym name="much" sim="0.1"/>
+</qsym>
+<qsym name="much">
+<csym name="few" sim="0.3"/>
+<csym name="middle" sim="0.7"/>
+<csym name="critical" sim="0.1"/>
+<csym name="full" sim="0.8"/>
+</qsym>
+<qsym name="full">
+<csym name="few" sim="0.1"/>
+<csym name="middle" sim="0.4"/>
+<csym name="much" sim="0.8"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="plan" type="String" mult="false" >
+      <fct name="default function" type="String" symm="true" config="EQUALITY" n="3" mt="PARTNER_QUERY" r="REUSE" t="MAX" />
+    </desc>
+    <desc name="isCovered" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <amalgam name="default function" type="EUCLIDEAN" active="true" >
+      <entry name="isWeaponNeeded" active="true" fct="default function" weight="1.0"/>
+      <entry name="distanceToCover" active="true" fct="default function" weight="1.0"/>
+      <entry name="isEnemyAlive" active="true" fct="default function" weight="1.0"/>
+      <entry name="winChance" active="true" fct="default function" weight="1.0"/>
+      <entry name="equippedWeapon" active="true" fct="default function" weight="1.0"/>
+      <entry name="currentOverallAmmunition" active="true" fct="default function" weight="1.0"/>
+      <entry name="distanceToHealth" active="true" fct="default function" weight="1.0"/>
+      <entry name="isAmmunitionNeeded" active="true" fct="default function" weight="1.0"/>
+      <entry name="quality" active="true" fct="default function" weight="1.0"/>
+      <entry name="distanceToWeapon" active="true" fct="default function" weight="1.0"/>
+      <entry name="upTime" active="true" fct="default function" weight="1.0"/>
+      <entry name="currentAmmunation" active="true" fct="default function" weight="1.0"/>
+      <entry name="distanceToAmmunition" active="true" fct="default function" weight="1.0"/>
+      <entry name="distanceToEnemy" active="true" fct="default function" weight="1.0"/>
+      <entry name="lastPosition" active="true" fct="default function" weight="1.0"/>
+      <entry name="isEnemyVisible" active="true" fct="default function" weight="1.0"/>
+      <entry name="isHealthNeeded" active="true" fct="default function" weight="1.0"/>
+      <entry name="killDeathRatio" active="true" fct="default function" weight="1.0"/>
+      <entry name="isCoverNeeded" active="true" fct="default function" weight="1.0"/>
+      <entry name="ownHealth" active="true" fct="default function" weight="1.0"/>
+      <entry name="plan" active="true" fct="default function" weight="1.0"/>
+      <entry name="isCovered" active="true" fct="default function" weight="1.0"/>
+    </amalgam>
+  </concept>
+</model>
+<hierarchy>
+  <fct name="default function" type="Taxonomy" mt="PARTNER_QUERY" r="REUSE" t="MAX" qconfig="INNER_NODES_ANY" cconfig="INNER_NODES_ANY" top="inheritanceDesc" sim="0.0" symm="true" >
+    <node name="Status" sim="1.0" parent="inheritanceDesc" />
+  </fct>
+</hierarchy>
+<cases no="0" cb="Test"/>
+</Project>

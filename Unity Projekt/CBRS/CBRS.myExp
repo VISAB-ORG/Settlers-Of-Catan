@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="CBRS" author="" >
+<exp obj="Status" type="Concept" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="isCovered" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="isEnemyVisible" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="currentOverallAmmunition" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="quality" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                        </desc>
+</exp>
+<exp obj="lastPosition" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="isEnemyAlive" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="currentAmmunation" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="ownHealth" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="equippedWeapon" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="isAmmunitionNeeded" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="distanceToAmmunition" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="distanceToCover" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="distanceToEnemy" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                            </desc>
+</exp>
+<exp obj="distanceToHealth" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="killDeathRatio" c="Status" type="AttributeDesc" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="isCoverNeeded" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="isHealthNeeded" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="isWeaponNeeded" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="winChance" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;            </desc>
+</exp>
+<exp obj="upTime" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;    </desc>
+</exp>
+<exp obj="plan" c="Status" type="AttributeDesc" >
+  <desc>
+&#10;                        </desc>
+</exp>
+<exp obj="distanceToWeapon" c="Status" type="AttributeDesc" >
+  <desc>
+                          </desc>
+</exp>
+<exp obj="winning" c="Status" desc="winChance" type="SimpleAttribute" >
+  <desc>
+&#10;            </desc>
+</exp>
+<exp obj="few" c="Status" desc="ownHealth" type="SimpleAttribute" >
+  <desc>
+&#10;            </desc>
+</exp>
+</Project>

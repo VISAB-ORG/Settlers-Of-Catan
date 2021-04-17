@@ -137,6 +137,7 @@ public class CBREngine {
 			Project project = new Project(data_path);*/
 			File f1 = new File(System.getProperty("user.dir"));
 			//jtf.setText(jtf.getText() + f1);
+			System.out.println(f1.getAbsolutePath());
 			File f2 = new File(f1.getAbsolutePath());
 			//jtf.setText(jtf.getText() + f2);
 			File f3 = new File(f2.getPath(), APPLICATION_NAME);
@@ -151,7 +152,7 @@ public class CBREngine {
 			}
 
 		} catch (Exception e) {
-			System.out.println("error: " + e.getMessage());
+			System.out.println("error: " + e.getStackTrace());
 			//jtf.setText(jtf.getText() + "error: " + e.getMessage());
 		}
 
