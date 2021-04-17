@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="CBRS_Siedler" author="" >
+<svs>
+  <sv name="_unknown_"/>
+  <sv name="_undefined_"/>
+  <sv name="_others_"/>
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="_unknown_">
+</qsym>
+<qsym name="_undefined_">
+</qsym>
+<qsym name="_others_">
+</qsym>
+</fct>
+</svs>
+<model>
+  <concept name="Status">
+    <desc name="isAbledToBuildCity" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="isAbledToEndTurn" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="isAllowedToRollDice" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="roadPlacesAvailable" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="roadPlacesActive" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="isAbledToBuildVillage" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="preference" type="String" mult="false" >
+      <fct name="default function" type="String" symm="true" config="EQUALITY" n="3" mt="PARTNER_QUERY" r="REUSE" t="MAX" />
+    </desc>
+    <desc name="isFirstTurn" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="cityPlacesActive" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="villagePlacesAvailable" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="hasFreeBuildRoad" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="isAbledToBuildRoad" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="isSecondTurn" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="hasLongestRoad" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="cityPlacesAvailable" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="villagePlacesActive" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="hasFreeBuild" type="Boolean" mult="false" >
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+</fct>
+    </desc>
+    <desc name="plan" type="String" mult="false" >
+      <fct name="default function" type="String" symm="true" config="EQUALITY" n="3" mt="PARTNER_QUERY" r="REUSE" t="MAX" />
+    </desc>
+    <amalgam name="default function" type="EUCLIDEAN" active="true" >
+      <entry name="isAbledToBuildCity" active="true" fct="default function" weight="1.0"/>
+      <entry name="isAbledToEndTurn" active="true" fct="default function" weight="1.0"/>
+      <entry name="isAllowedToRollDice" active="true" fct="default function" weight="1.0"/>
+      <entry name="roadPlacesAvailable" active="true" fct="default function" weight="1"/>
+      <entry name="roadPlacesActive" active="true" fct="default function" weight="1.0"/>
+      <entry name="isAbledToBuildVillage" active="true" fct="default function" weight="1.0"/>
+      <entry name="preference" active="true" fct="default function" weight="1.0"/>
+      <entry name="isFirstTurn" active="true" fct="default function" weight="1.0"/>
+      <entry name="cityPlacesActive" active="true" fct="default function" weight="1.0"/>
+      <entry name="villagePlacesAvailable" active="true" fct="default function" weight="1"/>
+      <entry name="hasFreeBuildRoad" active="true" fct="default function" weight="1.0"/>
+      <entry name="isAbledToBuildRoad" active="true" fct="default function" weight="1.0"/>
+      <entry name="isSecondTurn" active="true" fct="default function" weight="1.0"/>
+      <entry name="hasLongestRoad" active="true" fct="default function" weight="1.0"/>
+      <entry name="cityPlacesAvailable" active="true" fct="default function" weight="1"/>
+      <entry name="villagePlacesActive" active="true" fct="default function" weight="1.0"/>
+      <entry name="hasFreeBuild" active="true" fct="default function" weight="1.0"/>
+      <entry name="plan" active="true" fct="default function" weight="1.0"/>
+    </amalgam>
+  </concept>
+</model>
+<hierarchy>
+  <fct name="default function" type="Taxonomy" mt="PARTNER_QUERY" r="REUSE" t="MAX" qconfig="INNER_NODES_ANY" cconfig="INNER_NODES_ANY" top="inheritanceDesc" sim="0.0" symm="true" >
+    <node name="Status" sim="1.0" parent="inheritanceDesc" />
+  </fct>
+</hierarchy>
+<cases no="0" cb="Test"/>
+</Project>

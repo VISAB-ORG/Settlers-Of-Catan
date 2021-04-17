@@ -199,8 +199,7 @@ public class GameManager : MonoBehaviour
     private void StartAIProcess()
     {
         Process foo = new Process();
-        foo.StartInfo.FileName = @"C:\Users\tjark\Desktop\CBRSystem.jar";
-        foo.StartInfo.FileName = Environment.CurrentDirectory + @"\Assets\CBRSystem4.jar";
+        foo.StartInfo.FileName = Environment.CurrentDirectory + @"\Assets\CBRSystem_VGroup.jar";
         foo.StartInfo.Arguments = "" + Constants.PORT;
         foo.Start();
         connection = new Connection();
