@@ -3,6 +3,8 @@ package cbr_util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JTextArea;
+//import javax.swing.JTextArea;
 
 import de.dfki.mycbr.core.DefaultCaseBase;
 import de.dfki.mycbr.core.ICaseBase;
@@ -137,14 +139,13 @@ public class CBREngine {
 			Project project = new Project(data_path);*/
 			File f1 = new File(System.getProperty("user.dir"));
 			//jtf.setText(jtf.getText() + f1);
-			System.out.println(f1.getAbsolutePath());
 			File f2 = new File(f1.getAbsolutePath());
 			//jtf.setText(jtf.getText() + f2);
 			File f3 = new File(f2.getPath(), APPLICATION_NAME);
 			//jtf.setText(jtf.getText() + f3);
 			String projektPfad = new File(f3.getPath(), PROJECT_NAME).getAbsolutePath();
+			System.out.println("Absolute path to .prj file:" + projektPfad);
 			//jtf.setText(jtf.getText() + projektPfad);
-			System.out.println(projektPfad);
 			cbrProject = new Project(projektPfad).getProject();
 			
 			while (cbrProject.isImporting()) {
@@ -152,7 +153,10 @@ public class CBREngine {
 			}
 
 		} catch (Exception e) {
-			System.out.println("error: " + e.getStackTrace());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			String exceptionAsString = sw.toString();
+			System.out.println("Exception when getting CBREngine instance:" + exceptionAsString);
 			//jtf.setText(jtf.getText() + "error: " + e.getMessage());
 		}
 
