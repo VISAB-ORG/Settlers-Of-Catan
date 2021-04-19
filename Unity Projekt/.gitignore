@@ -2,6 +2,11 @@
 **/log.txt
 **/JavaLog.txt
 
+**/MonoBleedingEdge/
+**/Build/*_Data/
+**/Build/*.exe
+**/Build/*.dll
+
 *.vsconfig
 
 # This .gitignore file should be placed at the root of your Unity project directory
