@@ -1,6 +1,11 @@
-**/Java-Console_Output.txt
+**/Java-Console_Output.*
 **/log.txt
 **/JavaLog.txt
+
+**/MonoBleedingEdge/
+**/Build/*_Data/
+**/Build/*.exe
+**/Build/*.dll
 
 *.vsconfig
 
@@ -11,7 +16,6 @@
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
-/[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
