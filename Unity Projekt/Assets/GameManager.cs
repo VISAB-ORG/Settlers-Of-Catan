@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using System.IO;
 using System.Diagnostics;
 using Assets.Scripts.Connection;
 using Assets.Scripts.Utility;
@@ -199,9 +200,17 @@ public class GameManager : MonoBehaviour
     private void StartAIProcess()
     {
         Process foo = new Process();
-        foo.StartInfo.FileName = Environment.CurrentDirectory + @"\Assets\CBRSystem_VGroup.jar";
-        foo.StartInfo.Arguments = "" + Constants.PORT;
+        foo.StartInfo.UseShellExecute = false;
+        foo.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+        foo.StartInfo.FileName = "java";
+        foo.StartInfo.Arguments = "-jar " + @"Assets\CBRSystem_VGroup.jar " + Constants.PORT;
+        foo.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+        foo.StartInfo.CreateNoWindow = false;
+        foo.StartInfo.RedirectStandardError = true;
+        foo.StartInfo.RedirectStandardOutput = true;
+        //+ Environment.CurrentDirectory + @"\Assets\CBRSystem_VGroup.jar" + " " + Constants.PORT;
         foo.Start();
+
         connection = new Connection();
     }
 
