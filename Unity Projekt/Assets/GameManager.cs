@@ -11,6 +11,8 @@ using Assets.Scripts.Utility;
 using Assets.Scripts.CBR.Model;
 using Assets.Scripts.Model;
 using Assets.Scripts.CBR.Plan;
+using Assets.Scripts.VISAB;
+using VISABConnector;
 using System.Threading;
 using System.Diagnostics.Tracing;
 
@@ -20,6 +22,11 @@ using System.Diagnostics.Tracing;
  */
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// Cancellation Token to cancel the session to VISAB
+    /// </summary>
+    public static CancellationTokenSource VisabSessionCTS { get; private set; }
+
     public MapGeneratorScript mapGenerator;
 
     public PlayerScript player1, player2;
@@ -66,6 +73,8 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
+        VisabSessionCTS = new CancellationTokenSource();
+        VISABHelper.StartVISABSession(VisabSessionCTS.Token);
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
