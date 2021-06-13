@@ -6,8 +6,7 @@
     <members>
         <member name="T:VISABConnector.ApiResponse`1">
             <summary>
-            Is returned when requests to the VISAB WebApi are made. <typeparamref name="T">The type of
-            the requests responses content.</typeparamref>
+            Is returned when requests to the VISAB WebApi are made.
             </summary>
         </member>
         <member name="P:VISABConnector.ApiResponse`1.Content">
@@ -20,56 +19,10 @@
             Whether the request was successful.
             </summary>
         </member>
-        <member name="T:VISABConnector.AsyncHelper">
+        <member name="P:VISABConnector.ApiResponse`1.ErrorMessage">
             <summary>
-            Helper class for running asynchronous methods synchronously without deadlocking the current
-            thread. Should be used when VISABApi has to be used in non async methods.
-            TODO: Should probably be removed.
+            The error message that was returned by VISAB WebApi if request wasnt successful.
             </summary>
-        </member>
-        <member name="M:VISABConnector.AsyncHelper.RunSynchronously``1(System.Func{System.Threading.Tasks.Task{``0}})">
-            <summary>
-            Invokes the given Func on a different thread and waits on execution finish
-            </summary>
-            <typeparam name="TReturn">The return type of the Func</typeparam>
-            <param name="asyncMethod">The Func (function reference) to invoke</param>
-            <returns>The result of the Func invocation</returns>
-        </member>
-        <member name="M:VISABConnector.AsyncHelper.RunSynchronously``2(System.Func{``0,System.Threading.Tasks.Task{``1}},``0)">
-            <summary>
-            Invokes the given Func on a different thread and waits on execution finish
-            </summary>
-            <typeparam name="T1">The type of the first parameter</typeparam>
-            <typeparam name="TReturn">The return type of the Func</typeparam>
-            <param name="asyncMethod">The Func (function reference) to invoke</param>
-            <param name="value">The first parameter</param>
-            <returns>The result of the Func invocation</returns>
-        </member>
-        <member name="M:VISABConnector.AsyncHelper.RunSynchronously``3(System.Func{``0,``1,System.Threading.Tasks.Task{``2}},``0,``1)">
-            <summary>
-            Invokes the given Func on a different thread and waits on execution finish
-            </summary>
-            <typeparam name="T1">The type of the first parameter</typeparam>
-            <typeparam name="T2">The type of the second parameter</typeparam>
-            <typeparam name="TReturn">The return type of the Func</typeparam>
-            <param name="asyncMethod">The Func (function reference) to invoke</param>
-            <param name="value1">The first parameter</param>
-            <param name="value2">The second parameter</param>
-            <returns>The result of the Func invocation</returns>
-        </member>
-        <member name="M:VISABConnector.AsyncHelper.RunSynchronously``4(System.Func{``0,``1,``2,System.Threading.Tasks.Task{``3}},``0,``1,``2)">
-            <summary>
-            Invokes the given Func on a different thread and waits on execution finish
-            </summary>
-            <typeparam name="T1">The type of the first parameter</typeparam>
-            <typeparam name="T2">The type of the second parameter</typeparam>
-            <typeparam name="T3">The type of the third parameter</typeparam>
-            <typeparam name="TReturn">The return type of the Func</typeparam>
-            <param name="asyncMethod">The Func (function reference) to invoke</param>
-            <param name="value1">The first parameter</param>
-            <param name="value2">The second parameter</param>
-            <param name="value3">The third parameter</param>
-            <returns>The result of the Func invocation</returns>
         </member>
         <member name="T:VISABConnector.IImage">
             <summary>
@@ -117,12 +70,19 @@
             </summary>
             <returns>An ApiResponse object</returns>
         </member>
-        <member name="M:VISABConnector.IVISABSession.SendMap``1(``0)">
+        <member name="M:VISABConnector.IVISABSession.GetCreatedFile">
+            <summary>
+            Queries the file that was created by VISAB for the session. Only works if the session
+            was closed before.
+            </summary>
+            <returns>An ApiResponse object with the file as a json string in the content</returns>
+        </member>
+        <member name="M:VISABConnector.IVISABSession.SendImage``1(``0)">
             <summary>
             Sends a image object to the VISAB WebApi.
             </summary>
             <typeparam name="T">The type inheriting IImage</typeparam>
-            <param name="map">The image object of type T</param>
+            <param name="image">The image object of type T</param>
             <returns>An ApiResponse object</returns>
         </member>
         <member name="M:VISABConnector.IVISABSession.SendStatistics``1(``0)">
@@ -170,7 +130,7 @@
         </member>
         <member name="F:VISABConnector.Default.RequestTimeout">
             <summary>
-            Timeout for HTTP Requests in seconds.
+            Default timeout for HTTP Requests in seconds.
             </summary>
         </member>
         <member name="F:VISABConnector.Default.Encoding">
@@ -255,11 +215,17 @@
             The used HttpClient.
             </summary>
         </member>
-        <member name="M:VISABConnector.Http.RequestHandlerBase.#ctor(System.String)">
+        <member name="F:VISABConnector.Http.RequestHandlerBase.requestTimeout">
+            <summary>
+            The timeout for requests in seconds.
+            </summary>
+        </member>
+        <member name="M:VISABConnector.Http.RequestHandlerBase.#ctor(System.String,System.Int32)">
             <summary>
             Initializes a RequestHandlerBase instance.
             </summary>
             <param name="baseAdress">The base adress for the HttpClient</param>
+            <param name="requestTimeout">The timeout for requests in seconds</param>
         </member>
         <member name="M:VISABConnector.Http.RequestHandlerBase.GetHttpResponseAsync(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
             <summary>
@@ -284,7 +250,7 @@
             Reads the content from a HttpResponseMessage.
             </summary>
             <param name="httpResponse">The HttpResponseMessage to read the content from</param>
-            <returns>The content as a string, empty string if request wasnt successful</returns>
+            <returns>The content as a string, empty string if content was null</returns>
         </member>
         <member name="M:VISABConnector.Http.RequestHandlerBase.PrepareRequest(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
             <summary>
@@ -299,12 +265,13 @@
         <member name="T:VISABConnector.Http.VISABRequestHandler">
             <inheritdoc cref="T:VISABConnector.IVISABRequestHandler"/>
         </member>
-        <member name="M:VISABConnector.Http.VISABRequestHandler.#ctor(System.String,System.String)">
+        <member name="M:VISABConnector.Http.VISABRequestHandler.#ctor(System.String,System.String,System.Int32)">
             <summary>
             Initializes a VISABRequestHandler object.
             </summary>
             <param name="baseAdress">The base adress of the VISAB WebApi</param>
             <param name="gameHeader">The game for which information will be sent</param>
+            <param name="requestTimeout">The time in seconds until requests are timeouted</param>
         </member>
         <member name="T:VISABConnector.IgnorePropertyContractResolver`1">
             <summary>
@@ -328,40 +295,41 @@
             the VISAB WebApi.
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.ENDPOINT_GAME_SUPPORTED">
+        <member name="F:VISABConnector.VISABApi.EndpointGameSupported">
             <summary>
             Relative endpoint for checking useability for current game in VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.ENDPOINT_PING_TEST">
-            <summary>
-            Relative endpoint for ping testing the VISAB API
-            </summary>
-        </member>
-        <member name="F:VISABConnector.VISABApi.ENDPOINT_SESSION_LIST">
+        <member name="F:VISABConnector.VISABApi.EndpointListSessions">
             <summary>
             Relative endpoints for listing the currently active sessions in VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.ENDPOINT_SESSION_STATUS">
+        <member name="F:VISABConnector.VISABApi.EndpointPing">
+            <summary>
+            Relative endpoint for ping testing the VISAB API
+            </summary>
+        </member>
+        <member name="F:VISABConnector.VISABApi.EndpointSessionStatus">
             <summary>
             Relative endpoints for checking session status in VISAB API
             </summary>
         </member>
-        <member name="M:VISABConnector.VISABApi.#ctor(System.String,System.Int32)">
+        <member name="F:VISABConnector.VISABApi.EndpointOpenSession">
+            <summary>
+            Relative endpoint for opening session to VISAB API
+            </summary>
+        </member>
+        <member name="M:VISABConnector.VISABApi.#ctor(System.String,System.Int32,System.Int32)">
             <summary>
             </summary>
             <param name="hostName">The hostname of the VISAB WebAPi</param>
             <param name="port">The port of the VISAB WebApi</param>
-        </member>
-        <member name="M:VISABConnector.VISABApi.#ctor">
-            <summary>
-            Calls VISABApi(string hostName, int port) with default host name and port.
-            </summary>
+            <param name="requestTimeout">The time in seconds before a request is timeouted</param>
         </member>
         <member name="P:VISABConnector.VISABApi.ConnectorVersion">
             <summary>
-            The current Version of the VISABConnector.
+            The current Version of the VISABConnector dll.
             </summary>
         </member>
         <member name="P:VISABConnector.VISABApi.BaseAdress">
@@ -379,6 +347,11 @@
             The port on which the VISAB WebApi is running.
             </summary>
         </member>
+        <member name="P:VISABConnector.VISABApi.RequestTimeout">
+            <summary>
+            The time in seconds until a request is timeouted.
+            </summary>
+        </member>
         <member name="P:VISABConnector.VISABApi.SessionIndependantRequestHandler">
             <summary>
             Request handler used for making Http requests that are independant of sessions.
@@ -392,14 +365,14 @@
         </member>
         <member name="M:VISABConnector.VISABApi.GameIsSupported(System.String)">
             <summary>
-            Indicates if the VISAB WebApi can receive data for the given game
+            Indicates if the VISAB WebApi can receive data for the given game.
             </summary>
             <param name="game">The game to check</param>
-            <returns>True if game is supported, false else</returns>
+            <returns>Content is true if game is supported, false else</returns>
         </member>
         <member name="M:VISABConnector.VISABApi.GetActiveSessions">
             <summary>
-            Returns a list of the sessionIds for all active sessions
+            Returns a list of the sessionIds for all active sessions.
             </summary>
             <returns>A list of the sessionIds for all active sessions</returns>
         </member>
@@ -416,7 +389,6 @@
             Creates a IVISABSession object and opens a transmission session at the VISAB WebApi.
             </summary>
             <param name="game">The game of which to sent data</param>
-            <returns>A IVISABSession object if a transmission session was openend, else null</returns>
         </member>
         <member name="M:VISABConnector.VISABApi.IsApiReachable">
             <summary>
@@ -427,31 +399,32 @@
         <member name="T:VISABConnector.VISABSession">
             <inheritdoc cref="T:VISABConnector.IVISABSession"/>
         </member>
-        <member name="F:VISABConnector.VISABSession.ENDPOINT_MAP">
+        <member name="F:VISABConnector.VISABSession.EndpointCloseSession">
             <summary>
-            Relative endpoint for sending map images in VISAB API
+            Relative endpoint for closing session to VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABSession.ENDPOINT_SESSION_CLOSE">
+        <member name="F:VISABConnector.VISABSession.EndpointGetFile">
             <summary>
-            Relative endpoint for closing session in VISAB API
+            Relative endpoint for getting the created file at VISAB Api.
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABSession.ENDPOINT_SESSION_OPEN">
+        <member name="F:VISABConnector.VISABSession.EndpointSendImage">
             <summary>
-            Relative endpoint for opening session in VISAB API
+            Relative endpoint for sending images to VISAB API.
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABSession.ENDPOINT_STATISTICS">
+        <member name="F:VISABConnector.VISABSession.EndpointSendStatistics">
             <summary>
-            Relative endpoint for sending statistics in VISAB API
+            Relative endpoint for sending statistics to VISAB API
             </summary>
         </member>
-        <member name="M:VISABConnector.VISABSession.#ctor(System.String,System.String)">
+        <member name="M:VISABConnector.VISABSession.#ctor(System.String,System.Guid,VISABConnector.IVISABRequestHandler)">
             <summary>
             </summary>
-            <param name="baseAdress">The base adress of VISAB</param>
             <param name="game">The game of the session</param>
+            <param name="sessionId">The id of session</param>
+            <param name="requestHandler">The request handler that will be used by the session</param>
         </member>
     </members>
 </doc>
