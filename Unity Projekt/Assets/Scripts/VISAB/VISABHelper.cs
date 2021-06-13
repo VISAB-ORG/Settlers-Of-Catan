@@ -21,7 +21,8 @@ namespace Assets.Scripts.VISAB
         public static VISABStatistics GetStatistics()
         {
             var gameInformation = GameManager.GameInformation;
-            return new VISABStatistics() {
+            return new VISABStatistics()
+            {
 
                 Turn = gameInformation.TurnCounter,
                 TurnTimeStamp = gameInformation.TurnTimeStamp,
@@ -33,10 +34,13 @@ namespace Assets.Scripts.VISAB
         /// <summary>
         /// This method is called by the GameManager whenever information changes.
         /// </summary>
-        public static async void PushStatistics()
+        public static void PushStatistics()
         {
+            if (session == null)
+                return;
+
             VISABStatistics statistics = GetStatistics();
-            var response = await session.SendStatistics(statistics);
+            var response = session.SendStatistics(statistics).Result;
             if (response.IsSuccess)
                 Debug.Log($"Send statistics to VISAB! Turn:{statistics.Turn}, Time: {statistics.TurnTimeStamp}");
         }
@@ -66,28 +70,38 @@ namespace Assets.Scripts.VISAB
         }
 
         /// <summary>
-        /// Initiates the infinite loop that sends information to the VISAB api. The session is stopped
-        /// if the given cancellationToken is canceled.
+        /// Starts a VISAB session.
         /// </summary>
-        /// <returns>An awaitable Task</returns>
-        public static async Task StartVISABSession()
+        public static void StartVISABSession()
         {
             // Initializes the VISAB transmission session
             Debug.Log("Starting to initalize Session with VISAB WebApi.");
-            var visabApi = new VISABApi();
-            session = await visabApi.InitiateSession("Settlers").ConfigureAwait(false);
-
-            Debug.Log($"Initialized Session with VISAB WebApi! SessionId:{session.SessionId}");
+            var visabApi = new VISABApi(requestTimeout: 1);
+            var response = visabApi.InitiateSession("Settlers").Result;
+            if (response.IsSuccess)
+            {
+                session = response.Content;
+                Debug.Log($"Initialized Session with VISAB WebApi! SessionId:{session.SessionId}");
+            }
+            else
+            {
+                Debug.Log("Failed to initiate session with VISAB WebApi. Reason:\n");
+                Debug.Log(response.ErrorMessage);
+                return;
+            }
         }
 
         /// <summary>
         /// Simply close the VISAB Session from UnityGame-side.
         /// </summary>
-        public async static void CloseVISABSession()
+        public static void CloseVISABSession()
         {
+            if (session == null)
+                return;
+
             // Close the VISAB api session
             Debug.Log($"Closing VISAB WebApi session! SessionId:{session.SessionId}");
-            await session.CloseSession();
+            session.CloseSession().Wait();
             Debug.Log($"Closed session!");
         }
     }
