@@ -11,6 +11,8 @@ using Assets.Scripts.Utility;
 using Assets.Scripts.CBR.Model;
 using Assets.Scripts.Model;
 using Assets.Scripts.CBR.Plan;
+using Assets.Scripts.VISAB;
+using VISABConnector;
 using System.Threading;
 using System.Diagnostics.Tracing;
 
@@ -20,6 +22,13 @@ using System.Diagnostics.Tracing;
  */
 public class GameManager : MonoBehaviour
 {
+
+    /// <summary>
+    /// Represents the current state of the game
+    /// Might rename to GameState
+    /// </summary>
+    public static GameInformation GameInformation { get; private set; }
+
     public MapGeneratorScript mapGenerator;
 
     public PlayerScript player1, player2;
@@ -59,6 +68,9 @@ public class GameManager : MonoBehaviour
     private float enableEndTurnWait = 0.3f, addResourcesWait=0.2f, MakeAiTurnWait=1f, MakeAiMainTurnWait=2f;
     private bool isSpeedUp = true;
 
+    public static int turn { get; set;} = 0;
+    public static string turnTimeStamp { get; set;} = "";
+
     public int counter = 1;
 
     /**
@@ -66,6 +78,7 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
+        VISABHelper.StartVISABSession().Wait();
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
@@ -99,6 +112,19 @@ public class GameManager : MonoBehaviour
 
         lateStart = true;
     }
+
+    private void SetGameInformation()
+    {
+        GameInformation = new GameInformation
+        {
+            TurnCounter = turn,
+            TurnTimeStamp = turnTimeStamp,
+            Player1 = player1,
+            Player2 = player2
+        };
+    }
+
+
 
     /**
      * Einige Anweisungen können erst nach der Start-Methode ausgeführt werden, auch wenn sie zu Beginn des Spiels nötig sind. 
@@ -454,6 +480,13 @@ public class GameManager : MonoBehaviour
                 endTurnBtn.interactable = true;
         }
     }
+    /**
+      * Diese Unity-Methode wird beim Verlassen des Programms ausgeführt. Hier wird die Java-CBR Applikation beendet.
+      */
+    private void OnApplicationQuit()
+    {
+        VISABHelper.CloseVISABSession();
+    }
 
     /**
      * Methode, die Bauplätze, die zu nah an der nächsten Siedlung liegen zerstört.
@@ -538,6 +571,11 @@ public class GameManager : MonoBehaviour
      */
     public void OnEndTurn()
     {
+        turn++;
+        turnTimeStamp = DateTime.Now.ToString("HH:mm:ss");
+        SetGameInformation();
+        VISABHelper.PushStatistics();
+
         if (activePlayer.victoryPoints >= 10)
         {
             gameOverText.text = "Spiel beendet! Spieler " + ((activePlayer == player1) ? "1" : "2") + " hat gewonnen!"; //Sieger anzeigen
@@ -549,6 +587,9 @@ public class GameManager : MonoBehaviour
                 + "\nSiegpunkte Spieler 1: " + player1.victoryPoints
                 + "\nSiegpunkte Spieler 2: " + player2.victoryPoints
                 + "\nSieger: " + name);
+
+            UnityEngine.Debug.Log("Closing VISAB session due to end of match.");
+            VISABHelper.CloseVISABSession();
 
         }
         else
