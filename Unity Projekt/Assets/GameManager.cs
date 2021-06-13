@@ -22,10 +22,6 @@ using System.Diagnostics.Tracing;
  */
 public class GameManager : MonoBehaviour
 {
-    /// <summary>
-    /// Cancellation Token to cancel the session to VISAB
-    /// </summary>
-    public static CancellationTokenSource VisabSessionCTS { get; private set; }
 
     public MapGeneratorScript mapGenerator;
 
@@ -71,10 +67,9 @@ public class GameManager : MonoBehaviour
     /**
      * Die Buttons müssen zuerst deaktiviert werden, sonst kann dies von den KIs ausgenutzt werden
      */
-    private void Awake()
+    private async void Awake()
     {
-        VisabSessionCTS = new CancellationTokenSource();
-        VISABHelper.StartVISABSession(VisabSessionCTS.Token);
+        await VISABHelper.StartVISABSession();
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
