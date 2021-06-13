@@ -15,17 +15,19 @@ namespace Assets.Scripts.VISAB
     {
         private static IVISABSession session;
 
+        /// <summary>
+        /// Retrieve current game information and return them as VISABStatistics.
+        /// </summary>
         public static VISABStatistics GetStatistics()
         {
-            // var gameInformation = GameManager.GameInformation;
-            return null; 
-            //    new VISABStatistics
-            // {
-            //    Turn = gameInformation.TurnCounter,
-            //    TurnTimeStamp = gameInformation.TurnTimeStamp,
-            //    Player1 = ExtractPlayerInformation(gameInformation.Player1),
-            //    Player2 = ExtractPlayerInformation(gameInformation.Player2)
-            // };
+            var gameInformation = GameManager.GameInformation;
+            return new VISABStatistics() {
+
+                Turn = gameInformation.TurnCounter,
+                TurnTimeStamp = gameInformation.TurnTimeStamp,
+                Player1 = ExtractPlayerInformation(gameInformation.Player1),
+                Player2 = ExtractPlayerInformation(gameInformation.Player2)
+            };
         }
 
         /// <summary>
@@ -39,6 +41,9 @@ namespace Assets.Scripts.VISAB
                 Debug.Log($"Send statistics to VISAB! Turn:{statistics.Turn}, Time: {statistics.TurnTimeStamp}");
         }
 
+        /// <summary>
+        /// Helper method to extract information from a PlayerScript into a VISAB-conform object.
+        /// </summary>
         private static PlayerInformation ExtractPlayerInformation(PlayerScript player)
         {
             return new PlayerInformation
@@ -60,43 +65,32 @@ namespace Assets.Scripts.VISAB
             };
         }
 
-
         /// <summary>
         /// Initiates the infinite loop that sends information to the VISAB api. The session is stopped
         /// if the given cancellationToken is canceled.
         /// </summary>
-        /// <param name="cancellationToken">The cancellationToken</param>
         /// <returns>An awaitable Task</returns>
-        public static async Task StartVISABSession(CancellationToken cancellationToken)
+        public static async Task StartVISABSession()
         {
             // Initializes the VISAB transmission session
             Debug.Log("Starting to initalize Session with VISAB WebApi.");
+
             session = await VISABApi.InitiateSession("Settlers");
             if (session == default)
             {
                 // TODO: Start VISAB
-                while (session == default && !cancellationToken.IsCancellationRequested)
+                while (session == default)
                 {
                     Debug.Log("Couldent initialize VISAB api session!");
                     session = await VISABApi.InitiateSession("Settlers");
                 }
             }
             Debug.Log($"Initialized Session with VISAB WebApi! SessionId:{session.SessionId}");
-
-            if (cancellationToken.IsCancellationRequested == true)
-            {
-                // Close the VISAB api session
-                Debug.Log($"Closing VISAB WebApi session! SessionId:{session.SessionId}");
-                await session.CloseSession();
-                Debug.Log($"Closed session!");
-            }
         }
 
-        public static IVISABSession GetSession()
-        {
-            return session;
-        }
-
+        /// <summary>
+        /// Simply close the VISAB Session from UnityGame-side.
+        /// </summary>
         public async static void CloseVISABSession()
         {
             // Close the VISAB api session
