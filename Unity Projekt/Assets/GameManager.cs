@@ -76,9 +76,9 @@ public class GameManager : MonoBehaviour
     /**
      * Die Buttons müssen zuerst deaktiviert werden, sonst kann dies von den KIs ausgenutzt werden
      */
-    private async void Awake()
+    private void Awake()
     {
-        await VISABHelper.StartVISABSession();
+        VISABHelper.StartVISABSession().Wait();
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
@@ -479,6 +479,13 @@ public class GameManager : MonoBehaviour
             if (!activePlayer.freeBuild && !activePlayer.freeBuildRoad && (activePlayer.isFirstTurn || activePlayer.isSecondTurn))
                 endTurnBtn.interactable = true;
         }
+    }
+    /**
+      * Diese Unity-Methode wird beim Verlassen des Programms ausgeführt. Hier wird die Java-CBR Applikation beendet.
+      */
+    private void OnApplicationQuit()
+    {
+        VISABHelper.CloseVISABSession();
     }
 
     /**

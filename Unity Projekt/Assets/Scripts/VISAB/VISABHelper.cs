@@ -75,16 +75,8 @@ namespace Assets.Scripts.VISAB
             // Initializes the VISAB transmission session
             Debug.Log("Starting to initalize Session with VISAB WebApi.");
             var visabApi = new VISABApi();
-            session = await visabApi.InitiateSession("Settlers");
-            if (session == default)
-            {
-                // TODO: Start VISAB
-                while (session == default)
-                {
-                    Debug.Log("Couldent initialize VISAB api session!");
-                    session = await visabApi.InitiateSession("Settlers");
-                }
-            }
+            session = await visabApi.InitiateSession("Settlers").ConfigureAwait(false);
+
             Debug.Log($"Initialized Session with VISAB WebApi! SessionId:{session.SessionId}");
         }
 
