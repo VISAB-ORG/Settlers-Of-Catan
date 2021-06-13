@@ -568,6 +568,7 @@ public class GameManager : MonoBehaviour
         turnTimeStamp = DateTime.Now.ToString("HH:mm:ss");
         SetGameInformation();
         VISABHelper.PushStatistics();
+
         if (activePlayer.victoryPoints >= 10)
         {
             gameOverText.text = "Spiel beendet! Spieler " + ((activePlayer == player1) ? "1" : "2") + " hat gewonnen!"; //Sieger anzeigen
