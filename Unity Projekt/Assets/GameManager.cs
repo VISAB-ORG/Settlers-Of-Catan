@@ -23,6 +23,12 @@ using System.Diagnostics.Tracing;
 public class GameManager : MonoBehaviour
 {
 
+    /// <summary>
+    /// Represents the current state of the game
+    /// Might rename to GameState
+    /// </summary>
+    public static GameInformation GameInformation { get; private set; }
+
     public MapGeneratorScript mapGenerator;
 
     public PlayerScript player1, player2;
@@ -61,6 +67,9 @@ public class GameManager : MonoBehaviour
 
     private float enableEndTurnWait = 0.3f, addResourcesWait=0.2f, MakeAiTurnWait=1f, MakeAiMainTurnWait=2f;
     private bool isSpeedUp = true;
+
+    public static int turn { get; set;} = 0;
+    public static string turnTimeStamp { get; set;} = "";
 
     public int counter = 1;
 
@@ -103,6 +112,19 @@ public class GameManager : MonoBehaviour
 
         lateStart = true;
     }
+
+    private void SetGameInformation()
+    {
+        GameInformation = new GameInformation
+        {
+            TurnCounter = turn,
+            TurnTimeStamp = turnTimeStamp,
+            Player1 = player1,
+            Player2 = player2
+        };
+    }
+
+
 
     /**
      * Einige Anweisungen können erst nach der Start-Methode ausgeführt werden, auch wenn sie zu Beginn des Spiels nötig sind. 
@@ -542,6 +564,10 @@ public class GameManager : MonoBehaviour
      */
     public void OnEndTurn()
     {
+        turn++;
+        turnTimeStamp = DateTime.Now.ToString("HH:mm:ss");
+        SetGameInformation();
+        VISABHelper.PushStatistics();
         if (activePlayer.victoryPoints >= 10)
         {
             gameOverText.text = "Spiel beendet! Spieler " + ((activePlayer == player1) ? "1" : "2") + " hat gewonnen!"; //Sieger anzeigen
@@ -553,6 +579,9 @@ public class GameManager : MonoBehaviour
                 + "\nSiegpunkte Spieler 1: " + player1.victoryPoints
                 + "\nSiegpunkte Spieler 2: " + player2.victoryPoints
                 + "\nSieger: " + name);
+
+            UnityEngine.Debug.Log("Closing VISAB session due to end of match.");
+            VISABHelper.CloseVISABSession();
 
         }
         else
