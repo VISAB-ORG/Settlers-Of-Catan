@@ -15,6 +15,10 @@ namespace Assets.Scripts.VISAB
     {
         private static IVISABSession session;
 
+        public static string HostAdress { get; set; }
+        public static int Port { get; set; }
+        public static int RequestTimeout { get; set; }
+
         /// <summary>
         /// Retrieve current game information and return them as VISABStatistics.
         /// </summary>
@@ -74,9 +78,11 @@ namespace Assets.Scripts.VISAB
         /// </summary>
         public static void StartVISABSession()
         {
-            // Initializes the VISAB transmission session
+            Debug.Log($"Instantiating VISABApi with HostAdress: {HostAdress}, Port: {Port}, RequestTimeout: {RequestTimeout}");
+            var visabApi = new VISABApi(HostAdress, Port, RequestTimeout);
+            
             Debug.Log("Starting to initalize Session with VISAB WebApi.");
-            var visabApi = new VISABApi(requestTimeout: 1);
+            // Initializes the VISAB transmission session
             var response = visabApi.InitiateSession("Settlers").Result;
             if (response.IsSuccess)
             {

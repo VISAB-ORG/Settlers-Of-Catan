@@ -14,24 +14,19 @@
             The content of the response.
             </summary>
         </member>
-        <member name="P:VISABConnector.ApiResponse`1.IsSuccess">
-            <summary>
-            Whether the request was successful.
-            </summary>
-        </member>
         <member name="P:VISABConnector.ApiResponse`1.ErrorMessage">
             <summary>
             The error message that was returned by VISAB WebApi if request wasnt successful.
             </summary>
         </member>
-        <member name="T:VISABConnector.IImage">
+        <member name="P:VISABConnector.ApiResponse`1.IsSuccess">
             <summary>
-            The interface all classes used for sending images have to implement.
+            Whether the request was successful.
             </summary>
         </member>
-        <member name="P:VISABConnector.IImage.Game">
+        <member name="T:VISABConnector.IImage">
             <summary>
-            The game of which images are sent.
+            The marker interface all classes used for sending images have to implement.
             </summary>
         </member>
         <member name="T:VISABConnector.IVISABSession">
@@ -77,19 +72,17 @@
             </summary>
             <returns>An ApiResponse object with the file as a json string in the content</returns>
         </member>
-        <member name="M:VISABConnector.IVISABSession.SendImage``1(``0)">
+        <member name="M:VISABConnector.IVISABSession.SendImage(VISABConnector.IImage)">
             <summary>
             Sends a image object to the VISAB WebApi.
             </summary>
-            <typeparam name="T">The type inheriting IImage</typeparam>
             <param name="image">The image object of type T</param>
             <returns>An ApiResponse object</returns>
         </member>
-        <member name="M:VISABConnector.IVISABSession.SendStatistics``1(``0)">
+        <member name="M:VISABConnector.IVISABSession.SendStatistics(VISABConnector.IVISABStatistics)">
             <summary>
             Sends a statistics object to the VISAB WebApi.
             </summary>
-            <typeparam name="T">The type inheriting IVISABStatistics</typeparam>
             <param name="statistics">The statistics object of type T</param>
             <returns>An ApiResponse object</returns>
         </member>
@@ -118,9 +111,9 @@
             Default content media type.
             </summary>
         </member>
-        <member name="F:VISABConnector.Default.HostName">
+        <member name="F:VISABConnector.Default.HostAdress">
             <summary>
-            The default host name that VISAB is running on.
+            The default host adress that VISAB is running on.
             </summary>
         </member>
         <member name="F:VISABConnector.Default.Port">
@@ -265,12 +258,11 @@
         <member name="T:VISABConnector.Http.VISABRequestHandler">
             <inheritdoc cref="T:VISABConnector.IVISABRequestHandler"/>
         </member>
-        <member name="M:VISABConnector.Http.VISABRequestHandler.#ctor(System.String,System.String,System.Int32)">
+        <member name="M:VISABConnector.Http.VISABRequestHandler.#ctor(System.String,System.Int32)">
             <summary>
             Initializes a VISABRequestHandler object.
             </summary>
             <param name="baseAdress">The base adress of the VISAB WebApi</param>
-            <param name="gameHeader">The game for which information will be sent</param>
             <param name="requestTimeout">The time in seconds until requests are timeouted</param>
         </member>
         <member name="T:VISABConnector.IgnorePropertyContractResolver`1">
@@ -279,14 +271,20 @@
             </summary>
             <typeparam name="T">The attribute type to ignore</typeparam>
         </member>
-        <member name="T:VISABConnector.IVISABStatistics">
+        <member name="T:VISABConnector.IMetaInformation">
             <summary>
-            The interface that all classes used for sending statistics have to implement.
+            The interface that all classes used for sending meta information have to implement. This
+            information is required upon opening the session.
             </summary>
         </member>
-        <member name="P:VISABConnector.IVISABStatistics.Game">
+        <member name="P:VISABConnector.IMetaInformation.Game">
             <summary>
-            The game of which statistics are sent.
+            The game of which data will be sent.
+            </summary>
+        </member>
+        <member name="T:VISABConnector.IVISABStatistics">
+            <summary>
+            The marker interface that all classes used for sending statistics have to implement.
             </summary>
         </member>
         <member name="T:VISABConnector.VISABApi">
@@ -305,6 +303,11 @@
             Relative endpoints for listing the currently active sessions in VISAB API
             </summary>
         </member>
+        <member name="F:VISABConnector.VISABApi.EndpointOpenSession">
+            <summary>
+            Relative endpoint for opening session to VISAB API
+            </summary>
+        </member>
         <member name="F:VISABConnector.VISABApi.EndpointPing">
             <summary>
             Relative endpoint for ping testing the VISAB API
@@ -315,15 +318,10 @@
             Relative endpoints for checking session status in VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.EndpointOpenSession">
-            <summary>
-            Relative endpoint for opening session to VISAB API
-            </summary>
-        </member>
         <member name="M:VISABConnector.VISABApi.#ctor(System.String,System.Int32,System.Int32)">
             <summary>
             </summary>
-            <param name="hostName">The hostname of the VISAB WebAPi</param>
+            <param name="hostAdress">The hostadress of the VISAB WebAPi</param>
             <param name="port">The port of the VISAB WebApi</param>
             <param name="requestTimeout">The time in seconds before a request is timeouted</param>
         </member>
@@ -337,9 +335,9 @@
             The full base adress of the VISAB WebApi.
             </summary>
         </member>
-        <member name="P:VISABConnector.VISABApi.HostName">
+        <member name="P:VISABConnector.VISABApi.HostAdress">
             <summary>
-            The host name on which the VISAB WebApi is running.
+            The host adress on which the VISAB WebApi is running.
             </summary>
         </member>
         <member name="P:VISABConnector.VISABApi.Port">
@@ -384,11 +382,19 @@
             <param name="sessionId">The sessionId to check</param>
             <returns></returns>
         </member>
+        <member name="M:VISABConnector.VISABApi.InitiateSession(VISABConnector.IMetaInformation)">
+            <summary>
+            Creates a IVISABSession object and opens a transmission session at the VISAB WebApi.
+            </summary>
+            <param name="metaInformation">The meta information for the session to open</param>
+            <returns>An APIResponse object containing a IVISABSession if session was created</returns>
+        </member>
         <member name="M:VISABConnector.VISABApi.InitiateSession(System.String)">
             <summary>
             Creates a IVISABSession object and opens a transmission session at the VISAB WebApi.
             </summary>
-            <param name="game">The game of which to sent data</param>
+            <param name="game">The game for which to create the session</param>
+            <returns>An APIResponse object containing a IVISABSession if session was created.</returns>
         </member>
         <member name="M:VISABConnector.VISABApi.IsApiReachable">
             <summary>
