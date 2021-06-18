@@ -78,7 +78,10 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
-        VISABHelper.StartVISABSession();
+        // TODO: Decide how to handle this here.
+        RoundBasedSession.MessageAddedEvent += UnityEngine.Debug.Log;
+        var success = RoundBasedSession.StartSessionAsync("Settlers", VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Result;
+
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
@@ -488,7 +491,7 @@ public class GameManager : MonoBehaviour
       */
     private void OnApplicationQuit()
     {
-        VISABHelper.CloseVISABSession();
+        RoundBasedSession.CloseSessionAsync().Wait();
     }
 
     /**
@@ -577,7 +580,8 @@ public class GameManager : MonoBehaviour
         turn++;
         turnTimeStamp = DateTime.Now.ToString("HH:mm:ss");
         SetGameInformation();
-        VISABHelper.PushStatistics();
+        var statistics = VISABHelper.GetStatistics();
+        var result = RoundBasedSession.SendStatisticsAsync(statistics).Result;
 
         if (activePlayer.victoryPoints >= 10)
         {
@@ -592,8 +596,7 @@ public class GameManager : MonoBehaviour
                 + "\nSieger: " + name);
 
             UnityEngine.Debug.Log("Closing VISAB session due to end of match.");
-            VISABHelper.CloseVISABSession();
-
+            RoundBasedSession.CloseSessionAsync().Wait();
         }
         else
         {
