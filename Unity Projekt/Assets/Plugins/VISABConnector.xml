@@ -24,6 +24,150 @@
             Whether the request was successful.
             </summary>
         </member>
+        <member name="T:VISABConnector.LoopBasedSession">
+            <summary>
+            A wrapper class for communicating with the VISAB WebApi in games that sent data continously.
+            </summary>
+        </member>
+        <member name="E:VISABConnector.LoopBasedSession.MessageAddedEvent">
+            <summary>
+            Event that will be invoked when a log message should be written.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.LoopBasedSession.SavedFile">
+            <summary>
+            The file that was created and saved by the VISAB WebApi.
+            Contains the queried file if the statistics loop was initialized with queryFile: true.
+            </summary>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.CloseSessionAsync">
+            <summary>
+            Closes the active session.
+            </summary>
+            <returns>True if session was closed</returns>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.GetFileAsync">
+            <summary>
+            Receives the written json file for the session.
+            </summary>
+            <returns>The written json file if successfully retrieved, empty string else</returns>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.SendImagesAsync(VISABConnector.IImage)">
+            <summary>
+            Sends images using the current session.
+            </summary>
+            <param name="image">The image to send</param>
+            <returns>True if successfully sent</returns>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.StartSessionAsync(VISABConnector.IMetaInformation,System.String,System.Int32,System.Int32)">
+            <summary>
+            Starts a VISAB WebApi session.
+            </summary>
+            <param name="metaInformation">The metainformation with which to initialize the session</param>
+            <param name="hostAdress">The hostAdress of the VISAB WebApi</param>
+            <param name="port">The port of the VISAB WebApi</param>
+            <param name="requestTimeout">The request timeout to use</param>
+            <returns>True if session was started</returns>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.StartSessionAsync(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Starts a VISAB WebApi session.
+            </summary>
+            <param name="game">The game for which to start the session</param>
+            <param name="hostAdress">The hostAdress of the VISAB WebApi</param>
+            <param name="port">The port of the VISAB WebApi</param>
+            <param name="requestTimeout">The request timeout to use</param>
+            <returns>True if session was started</returns>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.StartStatisticsLoopAsync(System.Func{VISABConnector.IVISABStatistics},System.Func{System.Boolean},System.Int32,System.Threading.CancellationToken,System.Boolean,System.Boolean)">
+            <summary>
+            Starts an infinite loop of sending statistics to VISAB WebApi. This loop is cancelled if
+            the cancellationToken is. After the loop is cancelled, closes the internal session with
+            the VISAB WebApi.
+            </summary>
+            <param name="statisticsFunc">The function that will be invoked to get the statistics</param>
+            <param name="shouldSend">
+            The function that will be invoked to check if statistics should be sent. Statistics are
+            sent if it evaluateds to true.
+            </param>
+            <param name="sentDelay">The miliseconds to sleep each time after statistics were sent</param>
+            <param name="cancellationToken">
+            The cancellation token which will be used to check if the loop should be cancelled
+            </param>
+            <param name="breakOnFailed">
+            Whether to break out of the loop if sending statistics fails
+            </param>
+            <param name="queryFile">Whether to query the created file after the session was closed</param>
+        </member>
+        <member name="M:VISABConnector.LoopBasedSession.SendStatisticsAsync(VISABConnector.IVISABStatistics)">
+            <summary>
+            Sends statistics using the current session.
+            </summary>
+            <param name="statistics">The statistics to send</param>
+            <returns>True if successfully sent</returns>
+        </member>
+        <member name="T:VISABConnector.MessageConsumer">
+            <summary>
+            The message consumer delegate type.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:VISABConnector.RoundBasedSession">
+            <summary>
+            A wrapper class for communicating with the VISAB WebApi in round based games.
+            </summary>
+        </member>
+        <member name="E:VISABConnector.RoundBasedSession.MessageAddedEvent">
+            <summary>
+            Event that will be invoked when a log message should be written.
+            </summary>
+        </member>
+        <member name="M:VISABConnector.RoundBasedSession.CloseSessionAsync">
+            <summary>
+            Closes the active session.
+            </summary>
+            <returns>True if session was closed</returns>
+        </member>
+        <member name="M:VISABConnector.RoundBasedSession.GetFileAsync">
+            <summary>
+            Receives the written json file for the session.
+            </summary>
+            <returns>The written json file if successfully retrieved, empty string else</returns>
+        </member>
+        <member name="M:VISABConnector.RoundBasedSession.SendImagesAsync(VISABConnector.IImage)">
+            <summary>
+            Sends images using the current session.
+            </summary>
+            <param name="image">The image to send</param>
+            <returns>True if successfully sent</returns>
+        </member>
+        <member name="M:VISABConnector.RoundBasedSession.SendStatisticsAsync(VISABConnector.IVISABStatistics)">
+            <summary>
+            Sends statistics using the current session.
+            </summary>
+            <param name="statistics">The statistics to send</param>
+            <returns>True if successfully sent</returns>
+        </member>
+        <member name="M:VISABConnector.RoundBasedSession.StartSessionAsync(VISABConnector.IMetaInformation,System.String,System.Int32,System.Int32)">
+            <summary>
+            Starts a VISAB WebApi session.
+            </summary>
+            <param name="metaInformation">The metainformation with which to initialize the session</param>
+            <param name="hostAdress">The hostAdress of the VISAB WebApi</param>
+            <param name="port">The port of the VISAB WebApi</param>
+            <param name="requestTimeout">The request timeout to use</param>
+            <returns>True if session was started</returns>
+        </member>
+        <member name="M:VISABConnector.RoundBasedSession.StartSessionAsync(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Starts a VISAB WebApi session.
+            </summary>
+            <param name="game">The game for which to start the session</param>
+            <param name="hostAdress">The hostAdress of the VISAB WebApi</param>
+            <param name="port">The port of the VISAB WebApi</param>
+            <param name="requestTimeout">The request timeout to use</param>
+            <returns>True if session was started</returns>
+        </member>
         <member name="T:VISABConnector.IImage">
             <summary>
             The marker interface all classes used for sending images have to implement.
@@ -388,13 +532,6 @@
             </summary>
             <param name="metaInformation">The meta information for the session to open</param>
             <returns>An APIResponse object containing a IVISABSession if session was created</returns>
-        </member>
-        <member name="M:VISABConnector.VISABApi.InitiateSession(System.String)">
-            <summary>
-            Creates a IVISABSession object and opens a transmission session at the VISAB WebApi.
-            </summary>
-            <param name="game">The game for which to create the session</param>
-            <returns>An APIResponse object containing a IVISABSession if session was created.</returns>
         </member>
         <member name="M:VISABConnector.VISABApi.IsApiReachable">
             <summary>
