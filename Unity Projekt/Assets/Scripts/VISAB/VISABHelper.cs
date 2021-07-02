@@ -1,20 +1,19 @@
+using Assets.Scripts.VISAB.Model;
+using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using VISABConnector;
 using UnityEngine;
-using static GameManager;
+using VISABConnector;
 
 namespace Assets.Scripts.VISAB
 {
     public static class VISABHelper
     {
         public static string HostAdress { get; set; }
+
         public static int Port { get; set; }
+
         public static int RequestTimeout { get; set; }
 
         /// <summary>
@@ -23,14 +22,14 @@ namespace Assets.Scripts.VISAB
         public static VISABStatistics GetStatistics()
         {
             var gameInformation = GameManager.GameInformation;
-            return new VISABStatistics()
+            var statistics = new VISABStatistics()
             {
-
+                Players = gameInformation.Players.Select(x => ExtractPlayerInformation(x)).ToList(),
                 Turn = gameInformation.TurnCounter,
-                TurnTimeStamp = gameInformation.TurnTimeStamp,
-                Player1 = ExtractPlayerInformation(gameInformation.Player1),
-                Player2 = ExtractPlayerInformation(gameInformation.Player2)
+                TurnTimeStamp = gameInformation.TurnTimeStamp
             };
+            //Debug.Log(JsonConvert.SerializeObject(statistics));
+            return statistics;
         }
 
         /// <summary>
@@ -40,22 +39,64 @@ namespace Assets.Scripts.VISAB
         {
             return new PlayerInformation
             {
-                Brick = player.brick,
-                FreeBuild = player.freeBuild,
-                FreeBuildRoad = player.freeBuildRoad,
+                Resources = new PlayerResources
+                {
+                    Brick = player.brick,
+                    Sheep = player.sheep,
+                    Stone = player.stone,
+                    Wheat = player.wheat,
+                    Wood = player.wood
+                },
                 HasLongestRoad = player.hasLongestRoad,
                 IsAi = player.isAI,
                 LongestRoad = player.longestRoad,
                 Name = player.name,
-                Plan = "", // TODO: What do we do here?
-                RoadRange = player.roadRange,
-                Sheep = player.sheep,
-                Stone = player.stone,
+                PlanActions = player.CurrentPlanActions,
+                CityPositions = ExtractPositions(player.cities),
+                StreetPositions = ExtractPositions(player.roads),
+                VillagePositions = ExtractPositions(player.villages),
                 VictoryPoints = player.victoryPoints,
-                Wheat = player.wheat,
-                Wood = player.wood
             };
         }
 
+        private static IList<Model.Vector2> ExtractPositions(IEnumerable<GameObject> gameObjects)
+        {
+            var list = new List<Model.Vector2>();
+            foreach (var gameObject in gameObjects)
+            {
+                var position = gameObject.transform.position;
+                var vector2Pos = new Model.Vector2
+                {
+                    X = (int)position.x,
+                    Y = (int)position.y
+                };
+                list.Add(vector2Pos);
+            }
+
+            return list;
+        }
+
+        public static IMetaInformation GetMetaInformation()
+        {
+            var gameInformation = GameManager.GameInformation;
+
+            var playerInformation = new Dictionary<string, string>();
+            foreach (var player in gameInformation.Players)
+            {
+                if (player.isAI)
+                    playerInformation[player.name] = "script";
+                else
+                    playerInformation[player.name] = "human";
+            }
+
+            var metaInformation = new VISABMetaInformation
+            {
+                MapRectangle = null, // TODO
+                PlayerInformation = playerInformation
+            };
+
+            //Debug.Log(JsonConvert.SerializeObject(metaInformation));
+            return metaInformation;
+        }
     }
 }

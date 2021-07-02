@@ -1,17 +1,15 @@
+using Assets.Scripts.VISAB.Model;
+using System.Collections.Generic;
 using VISABConnector;
 
-namespace Assets.Scripts.VISAB
+namespace Assets.Scripts.VISAB.Model
 {
     public class VISABStatistics : IVISABStatistics
     {
-        public PlayerInformation Player1 { get; set; }
-
-        public PlayerInformation Player2 { get; set; }
-
         public int Turn { get; set; }
 
         public string TurnTimeStamp { get; set; }
 
-        public string Game => "Settlers";
+        public IList<PlayerInformation> Players { get; set; } = new List<PlayerInformation>();
     }
 }
