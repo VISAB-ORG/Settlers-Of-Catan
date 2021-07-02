@@ -11,5 +11,7 @@ namespace Assets.Scripts.VISAB.Model
         public string TurnTimeStamp { get; set; }
 
         public IList<PlayerInformation> Players { get; set; } = new List<PlayerInformation>();
+
+        public int DiceNumberRolled { get; set; }
     }
 }

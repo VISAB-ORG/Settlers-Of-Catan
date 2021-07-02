@@ -22,4 +22,6 @@ public class GameInformation
 
     public float RoadRange { get; set; }
 
+    public PlayerScript ActivePlayer { get; set; }
+    public int DiceNumberRolled { get; set; }
 }

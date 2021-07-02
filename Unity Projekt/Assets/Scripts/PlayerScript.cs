@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.CBR.Plan;
 using Assets.Scripts.Model;
+using Assets.Scripts.VISAB.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -198,6 +199,12 @@ public class PlayerScript : MonoBehaviour
      */
     public void CollectResources(int number)
     {
+        int currentWheat = wheat;
+        int currentSheep = sheep;
+        int currentStone = stone;
+        int currentBrick = brick;
+        int currentWood = wood;
+
         foreach (GameObject village in villages)
         {
             foreach (GameObject tile in village.GetComponent<Village>().tiles)
@@ -260,8 +267,18 @@ public class PlayerScript : MonoBehaviour
             }
         }
         UpdateResources();
+
+        GainedResources.Brick = brick - currentBrick;
+        GainedResources.Sheep = sheep - currentSheep;
+        GainedResources.Stone = stone - currentStone;
+        GainedResources.Wheat = wheat - currentWheat;
+        GainedResources.Wood = wood - currentWood;
     }
 
+    /// <summary>
+    /// Resources gained within the current turn.
+    /// </summary>
+    public PlayerResources GainedResources { get; } = new PlayerResources();
     /**
      * Siedlung bauen, funktioniert nur, wenn der Spieler, die Voraussetzungen erfüllt
      */

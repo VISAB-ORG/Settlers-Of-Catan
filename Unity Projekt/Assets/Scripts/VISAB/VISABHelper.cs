@@ -24,18 +24,19 @@ namespace Assets.Scripts.VISAB
             var gameInformation = GameManager.GameInformation;
             var statistics = new VISABStatistics()
             {
-                Players = gameInformation.Players.Select(x => ExtractPlayerInformation(x)).ToList(),
+                Players = gameInformation.Players.Select(x => ExtractPlayerInformation(x, gameInformation)).ToList(),
                 Turn = gameInformation.TurnCounter,
-                TurnTimeStamp = gameInformation.TurnTimeStamp
+                TurnTimeStamp = gameInformation.TurnTimeStamp,
+                DiceNumberRolled = gameInformation.DiceNumberRolled
             };
-            //Debug.Log(JsonConvert.SerializeObject(statistics));
+            Debug.Log(JsonConvert.SerializeObject(statistics));
             return statistics;
         }
 
         /// <summary>
         /// Helper method to extract information from a PlayerScript into a VISAB-conform object.
         /// </summary>
-        private static PlayerInformation ExtractPlayerInformation(PlayerScript player)
+        private static PlayerInformation ExtractPlayerInformation(PlayerScript player, GameInformation gameInformation)
         {
             return new PlayerInformation
             {
@@ -56,6 +57,8 @@ namespace Assets.Scripts.VISAB
                 StreetPositions = ExtractPositions(player.roads),
                 VillagePositions = ExtractPositions(player.villages),
                 VictoryPoints = player.victoryPoints,
+                IsMyTurn = gameInformation.ActivePlayer == player,
+                ResourcesGained = player.GainedResources
             };
         }
 

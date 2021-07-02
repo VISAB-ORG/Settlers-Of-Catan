@@ -18,6 +18,8 @@ namespace Assets.Scripts.VISAB.Model
 
         public PlayerResources Resources { get; set; }
 
+        public PlayerResources ResourcesGained { get; set; }
+
         public bool HasLongestRoad { get; set; }
 
         public bool IsAi { get; set; }
@@ -29,5 +31,7 @@ namespace Assets.Scripts.VISAB.Model
         public IList<string> PlanActions { get; set; }
 
         public int VictoryPoints { get; set; }
+
+        public bool IsMyTurn { get; set; }
     }
 }

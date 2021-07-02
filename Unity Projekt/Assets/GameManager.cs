@@ -121,17 +121,14 @@ public class GameManager : MonoBehaviour
 
     private void SetGameInformation()
     {
-        GameInformation = new GameInformation
-        {
-            TurnCounter = turn,
-            TurnTimeStamp = turnTimeStamp,
-            RoadRange = roadRange,
-            Players = new List<PlayerScript>
-            {
-                player1,
-                player2
-            }
-        };
+        if (GameInformation == null)
+            GameInformation = new GameInformation();
+
+        GameInformation.TurnCounter = turn;
+        GameInformation.TurnTimeStamp = turnTimeStamp;
+        GameInformation.RoadRange = roadRange;
+        GameInformation.Players = new List<PlayerScript> { player1, player2 };
+        GameInformation.ActivePlayer = activePlayer;
     }
 
 
@@ -560,7 +557,7 @@ public class GameManager : MonoBehaviour
             number = Dice.GetValue("");
         }
 
-        // -VISAB
+        GameInformation.DiceNumberRolled = number;
         player1.CollectResources(number);
         player2.CollectResources(number);
         activePlayer.UpdateResources();
