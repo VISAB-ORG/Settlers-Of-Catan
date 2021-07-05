@@ -167,6 +167,12 @@ public class PlayerScript : MonoBehaviour
      */
     public void CollectResourcesForVillage(GameObject village)
     {
+        int currentWheat = wheat;
+        int currentSheep = sheep;
+        int currentStone = stone;
+        int currentBrick = brick;
+        int currentWood = wood;
+
         foreach (GameObject tile in village.GetComponent<Village>().tiles)
         {
             //Debug.Log(tile.GetComponentInChildren<Renderer>().sharedMaterial.name);
@@ -192,7 +198,15 @@ public class PlayerScript : MonoBehaviour
             }
         }
         UpdateResources();
+
+        VillageGainedResources.Brick = brick - currentBrick;
+        VillageGainedResources.Sheep = sheep - currentSheep;
+        VillageGainedResources.Stone = stone - currentStone;
+        VillageGainedResources.Wheat = wheat - currentWheat;
+        VillageGainedResources.Wood = wood - currentWood;
     }
+
+
 
     /*
      * Sammeln von Ressourcen für eine bestimmte Nummer
@@ -275,8 +289,14 @@ public class PlayerScript : MonoBehaviour
         GainedResources.Wood = wood - currentWood;
     }
 
+
     /// <summary>
-    /// Resources gained within the current turn.
+    /// Resources gained for existing villages (only occurs in the second round in this implementation).
+    /// </summary>
+    public PlayerResources VillageGainedResources { get; } = new PlayerResources();
+
+    /// <summary>
+    /// Resources gained by diceroll within the current turn.
     /// </summary>
     public PlayerResources GainedResources { get; } = new PlayerResources();
     /**

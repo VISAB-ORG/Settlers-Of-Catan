@@ -20,6 +20,8 @@ namespace Assets.Scripts.VISAB.Model
 
         public PlayerResources ResourcesGained { get; set; }
 
+        public PlayerResources VillageResourcesGained { get; set; }
+
         public bool HasLongestRoad { get; set; }
 
         public bool IsAi { get; set; }
