@@ -117,6 +117,7 @@ public class PlayerScript : MonoBehaviour
      */
     public void Turn()
     {
+        VillageGainedResources = new PlayerResources();
         AdjustCamera();
         freeBuild = false;
         freeBuildRoad = false;
@@ -293,7 +294,7 @@ public class PlayerScript : MonoBehaviour
     /// <summary>
     /// Resources gained for existing villages (only occurs in the second round in this implementation).
     /// </summary>
-    public PlayerResources VillageGainedResources { get; } = new PlayerResources();
+    public PlayerResources VillageGainedResources { get; private set; } = new PlayerResources();
 
     /// <summary>
     /// Resources gained by diceroll within the current turn.

@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
+        Time.timeScale = 5;
+
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
