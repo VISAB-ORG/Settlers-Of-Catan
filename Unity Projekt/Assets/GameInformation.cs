@@ -1,4 +1,5 @@
 using Assets.Scripts.Model;
+using System.Collections.Generic;
 using UnityEngine;
 using static GameManager;
 
@@ -17,14 +18,10 @@ public class GameInformation
     /// </summary>
     public string TurnTimeStamp { get; set; }
 
-    /// <summary>
-    /// The player object controlled by script or human
-    /// </summary>
-    public PlayerScript Player1 { get; set; }
+    public IList<PlayerScript> Players { get; set; } = new List<PlayerScript>();
 
-    /// <summary>
-    /// The player object controlled by script or human
-    /// </summary>
-    public PlayerScript Player2 { get; set; }
+    public float RoadRange { get; set; }
 
+    public PlayerScript ActivePlayer { get; set; }
+    public int DiceNumberRolled { get; set; }
 }

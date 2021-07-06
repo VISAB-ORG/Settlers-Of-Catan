@@ -1,12 +1,26 @@
-namespace Assets.Scripts.VISAB
+using System.Collections.Generic;
+
+namespace Assets.Scripts.VISAB.Model
 {
     public class PlayerInformation
     {
-        public int Brick { get; set; }
+        public int VillageCount => VillagePositions.Count;
 
-        public bool FreeBuild { get; set; }
+        public IList<Vector2> VillagePositions { get; set; } = new List<Vector2>();
 
-        public bool FreeBuildRoad { get; set; }
+        public int StreetCount => StreetPositions.Count;
+
+        public IList<Vector2> StreetPositions { get; set; } = new List<Vector2>();
+
+        public int CityCount => CityPositions.Count;
+
+        public IList<Vector2> CityPositions { get; set; } = new List<Vector2>();
+
+        public PlayerResources Resources { get; set; }
+
+        public PlayerResources ResourcesGained { get; set; }
+
+        public PlayerResources VillageResourcesGained { get; set; }
 
         public bool HasLongestRoad { get; set; }
 
@@ -16,18 +30,10 @@ namespace Assets.Scripts.VISAB
 
         public string Name { get; set; }
 
-        public string Plan { get; set; }
-
-        public float RoadRange { get; set; }
-
-        public int Sheep { get; set; }
-
-        public int Stone { get; set; }
+        public IList<string> PlanActions { get; set; }
 
         public int VictoryPoints { get; set; }
 
-        public int Wheat { get; set; }
-
-        public int Wood { get; set; }
+        public bool IsMyTurn { get; set; }
     }
 }
