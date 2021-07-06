@@ -57,7 +57,7 @@ public class PlayerScript : MonoBehaviour
     public bool isAI;
     private GameManager gm;
 
-    public IList<string> CurrentPlanActions { get; set; }
+    public IList<string> CurrentPlanActions { get; set; } = new List<string>();
 
     private void Awake()
     {
@@ -91,6 +91,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void FirstTurn()
     {
+        CurrentPlanActions.Clear();
+
         /*brick = 5;
         wheat = 5;
         stone = 5;
@@ -107,6 +109,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void SecondTurn()
     {
+        CurrentPlanActions.Clear();
+
         AdjustCamera();
         isFirstTurn = false;
         isSecondTurn = true;
@@ -119,6 +123,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void Turn()
     {
+        CurrentPlanActions.Clear();
+
         VillageGainedResources = new PlayerResources();
         AdjustCamera();
         freeBuild = false;
@@ -494,15 +500,11 @@ public class PlayerScript : MonoBehaviour
         brickTxt.text = "Ich habe gewonnen";
     }
 
-    public IList<string> CurrentPlanActions { get; set; }
-
     /*
      * Methode, die einen Plan eines KI-Spielers ausführt
      */
     public bool FulfillPlan(Plan plan)
     {
-        CurrentPlanActions = plan.actions.Select(x => x.name).ToList();
-
         for (int i = 0; i < plan.GetActionCount(); i++)
         {
             if (plan.actions[i].GetType() == typeof(ActivateVillagePlaces))
