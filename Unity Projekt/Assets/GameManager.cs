@@ -15,6 +15,7 @@ using Assets.Scripts.VISAB;
 using VISABConnector;
 using System.Threading;
 using System.Diagnostics.Tracing;
+using System.Linq;
 
 /**
  * Klasse, zum Steuern des Spielflusses. 
@@ -195,6 +196,7 @@ public class GameManager : MonoBehaviour
         Plan plan = response.plan;
         plan.StringToActions();
         // UnityEngine.Debug.Log("Plan " + plan.ToString());
+        plan.actions.ForEach(x => activePlayer.CurrentPlanActions.Add(x.name));
         activePlayer.FulfillPlan(plan);
     }
 
@@ -208,6 +210,7 @@ public class GameManager : MonoBehaviour
         Response response = SendToAI(endTurnBtn.interactable, rollDiceBtn.interactable);
         Plan plan = response.plan;
         plan.StringToActions();
+        plan.actions.ForEach(x => activePlayer.CurrentPlanActions.Add(x.name));
         //UnityEngine.Debug.Log("Plan " + plan.ToString());
 
         bool wantsToEndTurn = false;

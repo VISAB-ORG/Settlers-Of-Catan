@@ -56,6 +56,8 @@ public class PlayerScript : MonoBehaviour
     public bool isAI;
     private GameManager gm;
 
+    public IList<string> CurrentPlanActions { get; set; }
+
     private void Awake()
     {
         isFirstTurn = false;
@@ -184,7 +186,7 @@ public class PlayerScript : MonoBehaviour
             else if (tile.GetComponentInChildren<Renderer>().sharedMaterial.name == "brick")
             {
                 brick++;
-            } 
+            }
             else if (tile.GetComponentInChildren<Renderer>().sharedMaterial.name == "wood")
             {
                 wood++;
@@ -276,7 +278,8 @@ public class PlayerScript : MonoBehaviour
                 sheep--;
                 wheat--;
                 freeBuildRoad = false;
-            } else
+            }
+            else
             {
                 freeBuild = false;
                 freeBuildRoad = true;
@@ -336,8 +339,8 @@ public class PlayerScript : MonoBehaviour
      */
     public GameObject BuildRoad(Vector3 position, Quaternion rotation)
     {
-        if (freeBuildRoad || this.HasResourcesForRoad()) 
-        { 
+        if (freeBuildRoad || this.HasResourcesForRoad())
+        {
 
             if (!freeBuildRoad)
             {
@@ -381,7 +384,7 @@ public class PlayerScript : MonoBehaviour
         if (roads.Count > 0)
         {
             List<int> roadLengths = new List<int>();
-            foreach(GameObject road in roads)
+            foreach (GameObject road in roads)
             //for (int i = 0; i < roads.Count; i++)
             {
                 roadsModified = new List<GameObject>(roads);
@@ -423,7 +426,7 @@ public class PlayerScript : MonoBehaviour
                 roadsModified.Remove(r);
                 roadsUpdated.Add(r);
                 neighbors++;
-            } 
+            }
             else
             {
                 i++;
@@ -477,7 +480,7 @@ public class PlayerScript : MonoBehaviour
             }
             else if (plan.actions[i].GetType() == typeof(BuildVillage))
             {
-                BuildVillage buildvillage = (BuildVillage) plan.actions[i];
+                BuildVillage buildvillage = (BuildVillage)plan.actions[i];
                 //Debug.Log("row" + buildvillage.row);
                 //Debug.Log("row" + buildvillage.column);
                 if (gm.map.getVillagePlaceByPosition(buildvillage.row, buildvillage.column).gameObject.activeSelf)
@@ -488,7 +491,7 @@ public class PlayerScript : MonoBehaviour
             else if (plan.actions[i].GetType() == typeof(Assets.Scripts.CBR.Plan.BuildCity))
             {
 
-                Assets.Scripts.CBR.Plan.BuildCity buildcity = (Assets.Scripts.CBR.Plan.BuildCity) plan.actions[i];
+                Assets.Scripts.CBR.Plan.BuildCity buildcity = (Assets.Scripts.CBR.Plan.BuildCity)plan.actions[i];
                 //Debug.Log("row" + buildcity.row);
                 //Debug.Log("row" + buildcity.column);
                 if (gm.map.getCityPlaceByPosition(buildcity.row, buildcity.column).gameObject.activeSelf)
@@ -498,7 +501,7 @@ public class PlayerScript : MonoBehaviour
             }
             else if (plan.actions[i].GetType() == typeof(Assets.Scripts.CBR.Plan.BuildRoad))
             {
-                Assets.Scripts.CBR.Plan.BuildRoad buildroad = (Assets.Scripts.CBR.Plan.BuildRoad) plan.actions[i];
+                Assets.Scripts.CBR.Plan.BuildRoad buildroad = (Assets.Scripts.CBR.Plan.BuildRoad)plan.actions[i];
                 //Debug.Log("row" + buildroad.row);
                 //Debug.Log("row" + buildroad.column);
                 if (gm.map.getRoadPlaceByPosition(buildroad.row, buildroad.column).gameObject.activeSelf)
