@@ -79,9 +79,7 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
-        // TODO: Decide how to handle this here.
-        RoundBasedSession.MessageAddedEvent += UnityEngine.Debug.Log;
-        var success = RoundBasedSession.StartSessionAsync("Settlers", VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Result;
+        Time.timeScale = 5;
 
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
@@ -117,17 +115,23 @@ public class GameManager : MonoBehaviour
         }
 
         lateStart = true;
+
+        SetGameInformation();
+
+        RoundBasedSession.MessageAddedEvent += UnityEngine.Debug.Log;
+        RoundBasedSession.StartSessionAsync(VISABHelper.GetMetaInformation(), VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
     }
 
     private void SetGameInformation()
     {
-        GameInformation = new GameInformation
-        {
-            TurnCounter = turn,
-            TurnTimeStamp = turnTimeStamp,
-            Player1 = player1,
-            Player2 = player2
-        };
+        if (GameInformation == null)
+            GameInformation = new GameInformation();
+
+        GameInformation.TurnCounter = turn;
+        GameInformation.TurnTimeStamp = turnTimeStamp;
+        GameInformation.RoadRange = roadRange;
+        GameInformation.Players = new List<PlayerScript> { player1, player2 };
+        GameInformation.ActivePlayer = activePlayer;
     }
 
 
@@ -558,7 +562,7 @@ public class GameManager : MonoBehaviour
             number = Dice.GetValue("");
         }
 
-
+        GameInformation.DiceNumberRolled = number;
         player1.CollectResources(number);
         player2.CollectResources(number);
         activePlayer.UpdateResources();

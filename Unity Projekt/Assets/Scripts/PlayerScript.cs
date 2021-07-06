@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.CBR.Plan;
 using Assets.Scripts.Model;
+using Assets.Scripts.VISAB.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -118,6 +119,7 @@ public class PlayerScript : MonoBehaviour
      */
     public void Turn()
     {
+        VillageGainedResources = new PlayerResources();
         AdjustCamera();
         freeBuild = false;
         freeBuildRoad = false;
@@ -168,6 +170,12 @@ public class PlayerScript : MonoBehaviour
      */
     public void CollectResourcesForVillage(GameObject village)
     {
+        int currentWheat = wheat;
+        int currentSheep = sheep;
+        int currentStone = stone;
+        int currentBrick = brick;
+        int currentWood = wood;
+
         foreach (GameObject tile in village.GetComponent<Village>().tiles)
         {
             //Debug.Log(tile.GetComponentInChildren<Renderer>().sharedMaterial.name);
@@ -193,13 +201,27 @@ public class PlayerScript : MonoBehaviour
             }
         }
         UpdateResources();
+
+        VillageGainedResources.Brick = brick - currentBrick;
+        VillageGainedResources.Sheep = sheep - currentSheep;
+        VillageGainedResources.Stone = stone - currentStone;
+        VillageGainedResources.Wheat = wheat - currentWheat;
+        VillageGainedResources.Wood = wood - currentWood;
     }
+
+
 
     /*
      * Sammeln von Ressourcen für eine bestimmte Nummer
      */
     public void CollectResources(int number)
     {
+        int currentWheat = wheat;
+        int currentSheep = sheep;
+        int currentStone = stone;
+        int currentBrick = brick;
+        int currentWood = wood;
+
         foreach (GameObject village in villages)
         {
             foreach (GameObject tile in village.GetComponent<Village>().tiles)
@@ -262,8 +284,24 @@ public class PlayerScript : MonoBehaviour
             }
         }
         UpdateResources();
+
+        GainedResources.Brick = brick - currentBrick;
+        GainedResources.Sheep = sheep - currentSheep;
+        GainedResources.Stone = stone - currentStone;
+        GainedResources.Wheat = wheat - currentWheat;
+        GainedResources.Wood = wood - currentWood;
     }
 
+
+    /// <summary>
+    /// Resources gained for existing villages (only occurs in the second round in this implementation).
+    /// </summary>
+    public PlayerResources VillageGainedResources { get; private set; } = new PlayerResources();
+
+    /// <summary>
+    /// Resources gained by diceroll within the current turn.
+    /// </summary>
+    public PlayerResources GainedResources { get; } = new PlayerResources();
     /**
      * Siedlung bauen, funktioniert nur, wenn der Spieler, die Voraussetzungen erfüllt
      */
@@ -456,11 +494,15 @@ public class PlayerScript : MonoBehaviour
         brickTxt.text = "Ich habe gewonnen";
     }
 
+    public IList<string> CurrentPlanActions { get; set; }
+
     /*
      * Methode, die einen Plan eines KI-Spielers ausführt
      */
     public bool FulfillPlan(Plan plan)
     {
+        CurrentPlanActions = plan.actions.Select(x => x.name).ToList();
+
         for (int i = 0; i < plan.GetActionCount(); i++)
         {
             if (plan.actions[i].GetType() == typeof(ActivateVillagePlaces))
