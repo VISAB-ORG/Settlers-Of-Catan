@@ -15,6 +15,6 @@ namespace Assets.Scripts.VISAB.Model
 
         public IDictionary<string, string> PlayerInformation { get; set; } = new Dictionary<string, string>();
 
-        public Rectangle MapRectangle { get; set; }
+        public MapRectangle MapRectangle { get; set; }
     }
 }

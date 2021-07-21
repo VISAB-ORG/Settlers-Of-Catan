@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.VISAB.Model
 {
-    public class Rectangle
+    public class MapRectangle
     {
         public int Width { get; set; }
         public int Height { get; set; }
+
+        public Vector2 TopLeftAnchorPoint { get; set; }
 
     }
 }

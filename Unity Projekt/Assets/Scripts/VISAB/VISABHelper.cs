@@ -72,7 +72,7 @@ namespace Assets.Scripts.VISAB
                 var vector2Pos = new Model.Vector2
                 {
                     X = (int)position.x,
-                    Y = (int)position.y
+                    Y = (int)position.z
                 };
                 list.Add(vector2Pos);
             }
@@ -101,6 +101,15 @@ namespace Assets.Scripts.VISAB
 
             //Debug.Log(JsonConvert.SerializeObject(metaInformation));
             return metaInformation;
+        }
+
+        private static MapRectangle GetMapRectangle()
+        {
+            var map = GameObject.Find("Map");
+
+
+
+            return null;
         }
     }
 }
