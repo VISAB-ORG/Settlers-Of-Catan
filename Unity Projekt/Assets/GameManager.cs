@@ -159,6 +159,8 @@ public class GameManager : MonoBehaviour
             map.cityBuildPlaces.Add(cityPlace.GetComponent<BuildCity>().cityPlace);
         }
 
+        Time.timeScale = 20;
+
         // VISAB
         SetGameInformation();
 

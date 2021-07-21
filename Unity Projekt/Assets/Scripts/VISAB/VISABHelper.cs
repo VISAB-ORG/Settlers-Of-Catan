@@ -12,11 +12,11 @@ namespace Assets.Scripts.VISAB
 {
     public static class VISABHelper
     {
-        public static string HostAdress { get; set; }
+        public static string HostAdress { get; set; } = "http://localhost";
 
-        public static int Port { get; set; }
+        public static int Port { get; set; } = 2673;
 
-        public static int RequestTimeout { get; set; }
+        public static int RequestTimeout { get; set; } = 2;
 
         /// <summary>
         /// Retrieve current game information and return them as VISABStatistics.
