@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VISABConnector;
+using VISABConnector.Unity;
 
 namespace Assets.Scripts.VISAB
 {
@@ -95,7 +97,7 @@ namespace Assets.Scripts.VISAB
 
             var metaInformation = new VISABMetaInformation
             {
-                MapRectangle = null, // TODO
+                MapRectangle = GetMapRectangle(),
                 PlayerInformation = playerInformation
             };
 
@@ -103,13 +105,101 @@ namespace Assets.Scripts.VISAB
             return metaInformation;
         }
 
-        private static MapRectangle GetMapRectangle()
+        public static VISABImageContainer MakeSnapshots()
         {
+            Func<string, SnapshotConfiguration> defaultInstantiate = (prefabPath) => new SnapshotConfiguration
+            {
+                ImageHeight = 1024,
+                ImageWidth = 1024,
+                CameraOffset = 2f,
+                Orthographic = true,
+                InstantiationSettings = new InstantiationConfiguration
+                {
+                    PrefabPath = prefabPath,
+                    SpawnLocation = new Vector3(100, 100, 100),
+                    SpawnRotation = Quaternion.identity
+                }
+            };
+
+            Func<string, SnapshotConfiguration> defaultExisting = (gameId) => new SnapshotConfiguration
+            {
+                ImageHeight = 1024,
+                ImageWidth = 1024,
+                CameraOffset = 2f,
+                Orthographic = true,
+                GameObjectId = gameId
+            };
+
+            var prefabPaths = new Dictionary<string, string>
+            {
+                { "WeaponCrate", "Prefabs/WeaponsCrate/WeaponsCrate" },
+                { "M4a1", "Prefabs/M4A1_Collectable" },
+                { "Health", "Prefabs/Health" }
+            };
+
+            var existingIds = new Dictionary<string, string>
+            {
+                { "John Doe", "John Doe" },
+                { "Jane Doe", "Jane Doe" }
+            };
+
+            var images = new VISABImageContainer();
+
+            foreach (var pair in prefabPaths)
+            {
+                var config = defaultInstantiate(pair.Value);
+                var bytes = ImageCreator.TakeSnapshot(config);
+
+                images.StaticObjects.Add(pair.Key, bytes);
+            }
+
+            foreach (var pair in existingIds)
+            {
+                var config = defaultExisting(pair.Value);
+                var bytes = ImageCreator.TakeSnapshot(config);
+
+                images.MoveableObjects.Add(pair.Key, bytes);
+            }
+
+            Debug.Log(JsonConvert.SerializeObject(images));
+
+            return images;
+        }
+
+        public static MapRectangle GetMapRectangle()
+        {
+            // get root objects in scene
+            List<GameObject> rootObjects = new List<GameObject>();
+            Scene scene = SceneManager.GetActiveScene();
+            scene.GetRootGameObjects(rootObjects);
+
             var map = GameObject.Find("Map");
 
+            var bounds = map.GetBoundsWithChildren();
+            var anchorPoint = new Model.Vector2 { X = (int)bounds.min.x, Y = (int)bounds.min.z };
 
+            return new MapRectangle
+            {
+                Height = (int)bounds.size.z,
+                Width = (int)bounds.size.x,
+                TopLeftAnchorPoint = anchorPoint
+            };
+        }
 
-            return null;
+        public static Bounds GetBoundsWithChildren(this GameObject gameObject)
+        {
+            Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
+
+            Bounds bounds = renderers.Length > 0 ? renderers[0].bounds : new Bounds();
+
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                if (renderers[i])
+                {
+                    bounds.Encapsulate(renderers[i].bounds);
+                }
+            }
+            return bounds;
         }
     }
 }

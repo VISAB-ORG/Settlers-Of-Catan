@@ -115,11 +115,6 @@ public class GameManager : MonoBehaviour
         }
 
         lateStart = true;
-
-        SetGameInformation();
-
-        RoundBasedSession.MessageAddedEvent += UnityEngine.Debug.Log;
-        RoundBasedSession.StartSessionAsync(VISABHelper.GetMetaInformation(), VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
     }
 
     private void SetGameInformation()
@@ -163,6 +158,14 @@ public class GameManager : MonoBehaviour
         {
             map.cityBuildPlaces.Add(cityPlace.GetComponent<BuildCity>().cityPlace);
         }
+
+        // VISAB
+        SetGameInformation();
+
+        RoundBasedSession.MessageAddedEvent += UnityEngine.Debug.Log;
+
+        var metaInformation = VISABHelper.GetMetaInformation();
+        RoundBasedSession.StartSessionAsync(metaInformation, VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
 
         //Nun kann der erste Zug von Spieler 1 ausgeführt werden
         activePlayer.FirstTurn();
