@@ -2,6 +2,7 @@ using Assets.Scripts.VISAB.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -87,8 +88,12 @@ namespace Assets.Scripts.VISAB
             var gameInformation = GameManager.GameInformation;
 
             var playerInformation = new Dictionary<string, string>();
+            var playerColors = new Dictionary<string, string>();
             foreach (var player in gameInformation.Players)
             {
+                var random = new System.Random();
+                var color = String.Format("#{0:X6}", random.Next(0x1000000));
+                playerColors.Add(player.name, color);
                 if (player.isAI)
                     playerInformation[player.name] = "script";
                 else
@@ -98,7 +103,8 @@ namespace Assets.Scripts.VISAB
             var metaInformation = new VISABMetaInformation
             {
                 MapRectangle = GetMapRectangle(),
-                PlayerInformation = playerInformation
+                PlayerInformation = playerInformation,
+                PlayerColors = playerColors
             };
 
             //Debug.Log(JsonConvert.SerializeObject(metaInformation));
@@ -107,72 +113,58 @@ namespace Assets.Scripts.VISAB
 
         public static VISABImageContainer MakeSnapshots()
         {
-            Func<string, SnapshotConfiguration> defaultInstantiate = (prefabPath) => new SnapshotConfiguration
+            static SnapshotConfiguration defaultInstantiate(string prefabPath) => new SnapshotConfiguration
             {
                 ImageHeight = 1024,
                 ImageWidth = 1024,
-                CameraOffset = 2f,
-                Orthographic = true,
                 InstantiationSettings = new InstantiationConfiguration
                 {
-                    PrefabPath = prefabPath,
                     SpawnLocation = new Vector3(100, 100, 100),
-                    SpawnRotation = Quaternion.identity
+                    PrefabPath = prefabPath
+                },
+                CameraConfiguration = new CameraConfiguration
+                {
+                    CameraOffset = .5f,
+                    Orthographic = false,
                 }
             };
 
-            Func<string, SnapshotConfiguration> defaultExisting = (gameId) => new SnapshotConfiguration
-            {
-                ImageHeight = 1024,
-                ImageWidth = 1024,
-                CameraOffset = 2f,
-                Orthographic = true,
-                GameObjectId = gameId
-            };
-
-            var prefabPaths = new Dictionary<string, string>
-            {
-                { "WeaponCrate", "Prefabs/WeaponsCrate/WeaponsCrate" },
-                { "M4a1", "Prefabs/M4A1_Collectable" },
-                { "Health", "Prefabs/Health" }
-            };
-
-            var existingIds = new Dictionary<string, string>
-            {
-                { "John Doe", "John Doe" },
-                { "Jane Doe", "Jane Doe" }
-            };
-
             var images = new VISABImageContainer();
+            var city = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/City"));
+            var street = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/Road"));
+            var village = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/Village"));
 
-            foreach (var pair in prefabPaths)
+            var mapConfig = new SnapshotConfiguration
             {
-                var config = defaultInstantiate(pair.Value);
-                var bytes = ImageCreator.TakeSnapshot(config);
+                CameraConfiguration = new CameraConfiguration
+                {
+                    CameraOffset = 0.1f,
+                    Orthographic = true,
+                    OrthographicSize = 5
+                },
+                GameObjectId = "Map",
+                ImageHeight = 1024,
+                ImageWidth = 1024
+            };
+            var map = ImageCreator.TakeSnapshot(mapConfig);
 
-                images.StaticObjects.Add(pair.Key, bytes);
-            }
+            File.WriteAllBytes("map.png", map);
 
-            foreach (var pair in existingIds)
-            {
-                var config = defaultExisting(pair.Value);
-                var bytes = ImageCreator.TakeSnapshot(config);
-
-                images.MoveableObjects.Add(pair.Key, bytes);
-            }
+            images.CityImage = city;
+            images.StreetImage = street;
+            images.VillageImage = village;
 
             Debug.Log(JsonConvert.SerializeObject(images));
+
+            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
+            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
+            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
 
             return images;
         }
 
         public static MapRectangle GetMapRectangle()
         {
-            // get root objects in scene
-            List<GameObject> rootObjects = new List<GameObject>();
-            Scene scene = SceneManager.GetActiveScene();
-            scene.GetRootGameObjects(rootObjects);
-
             var map = GameObject.Find("Map");
 
             var bounds = map.GetBoundsWithChildren();

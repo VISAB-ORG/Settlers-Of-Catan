@@ -161,6 +161,8 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 20;
 
+        UnityEngine.Debug.Log(LayerMask.NameToLayer("ashkfj"));
+
         // VISAB
         SetGameInformation();
 
@@ -168,6 +170,8 @@ public class GameManager : MonoBehaviour
 
         var metaInformation = VISABHelper.GetMetaInformation();
         RoundBasedSession.StartSessionAsync(metaInformation, VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
+
+        VISABHelper.MakeSnapshots();
 
         //Nun kann der erste Zug von Spieler 1 ausgeführt werden
         activePlayer.FirstTurn();

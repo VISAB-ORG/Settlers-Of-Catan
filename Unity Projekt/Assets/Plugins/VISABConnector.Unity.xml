@@ -36,6 +36,13 @@
             <param name="config">The configuration based on which the GameObject will be instantiated</param>
             <returns>The instance for the given configuration</returns>
         </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.SetLayerRecursively(UnityEngine.GameObject,System.Int32)">
+            <summary>
+            Assigns Layer to all children of gameobjects
+            </summary>
+            <param name="obj"></param>
+            <param name="layer"></param>
+        </member>
         <member name="M:VISABConnector.Unity.SnapshotConfiguration.#ctor">
             <summary>
             TODO: Really not name? GameObject.Find has a parameter with name that is used by us

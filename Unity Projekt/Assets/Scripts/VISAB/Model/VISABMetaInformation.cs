@@ -14,6 +14,7 @@ namespace Assets.Scripts.VISAB.Model
         public int PlayerCount => PlayerInformation.Count;
 
         public IDictionary<string, string> PlayerInformation { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string> PlayerColors { get; set; } = new Dictionary<string, string>();
 
         public MapRectangle MapRectangle { get; set; }
     }
