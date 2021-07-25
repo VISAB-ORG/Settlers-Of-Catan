@@ -33,7 +33,7 @@ namespace Assets.Scripts.Connection
             mClient = new TcpClient();
             mClient.Connect(Constants.HOST_ADDRESS, Constants.PORT);
             mStream = mClient.GetStream();
-            UnityEngine.Debug.Log(mStream);
+            //UnityEngine.Debug.Log(mStream);
         }
 
         ~Connection()

@@ -88,12 +88,14 @@ namespace Assets.Scripts.VISAB
             var gameInformation = GameManager.GameInformation;
 
             var playerInformation = new Dictionary<string, string>();
-            var playerColors = new Dictionary<string, string>();
+            var playerColors = new Dictionary<string, string>
+            {
+                { "Player1", "#FF851B" },
+                { "Player2", "#B10DC9" }
+            };
+
             foreach (var player in gameInformation.Players)
             {
-                var random = new System.Random();
-                var color = String.Format("#{0:X6}", random.Next(0x1000000));
-                playerColors.Add(player.name, color);
                 if (player.isAI)
                     playerInformation[player.name] = "script";
                 else
