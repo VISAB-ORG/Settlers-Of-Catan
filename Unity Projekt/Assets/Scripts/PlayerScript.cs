@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.CBR.Plan;
 using Assets.Scripts.Model;
+using Assets.Scripts.VISAB.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,6 +57,8 @@ public class PlayerScript : MonoBehaviour
     public bool isAI;
     private GameManager gm;
 
+    public IList<string> CurrentPlanActions { get; set; } = new List<string>();
+
     private void Awake()
     {
         isFirstTurn = false;
@@ -88,6 +91,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void FirstTurn()
     {
+        CurrentPlanActions.Clear();
+
         /*brick = 5;
         wheat = 5;
         stone = 5;
@@ -104,6 +109,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void SecondTurn()
     {
+        CurrentPlanActions.Clear();
+
         AdjustCamera();
         isFirstTurn = false;
         isSecondTurn = true;
@@ -116,6 +123,9 @@ public class PlayerScript : MonoBehaviour
      */
     public void Turn()
     {
+        CurrentPlanActions.Clear();
+
+        VillageGainedResources = new PlayerResources();
         AdjustCamera();
         freeBuild = false;
         freeBuildRoad = false;
@@ -166,6 +176,12 @@ public class PlayerScript : MonoBehaviour
      */
     public void CollectResourcesForVillage(GameObject village)
     {
+        int currentWheat = wheat;
+        int currentSheep = sheep;
+        int currentStone = stone;
+        int currentBrick = brick;
+        int currentWood = wood;
+
         foreach (GameObject tile in village.GetComponent<Village>().tiles)
         {
             //Debug.Log(tile.GetComponentInChildren<Renderer>().sharedMaterial.name);
@@ -184,20 +200,34 @@ public class PlayerScript : MonoBehaviour
             else if (tile.GetComponentInChildren<Renderer>().sharedMaterial.name == "brick")
             {
                 brick++;
-            } 
+            }
             else if (tile.GetComponentInChildren<Renderer>().sharedMaterial.name == "wood")
             {
                 wood++;
             }
         }
         UpdateResources();
+
+        VillageGainedResources.Brick = brick - currentBrick;
+        VillageGainedResources.Sheep = sheep - currentSheep;
+        VillageGainedResources.Stone = stone - currentStone;
+        VillageGainedResources.Wheat = wheat - currentWheat;
+        VillageGainedResources.Wood = wood - currentWood;
     }
+
+
 
     /*
      * Sammeln von Ressourcen für eine bestimmte Nummer
      */
     public void CollectResources(int number)
     {
+        int currentWheat = wheat;
+        int currentSheep = sheep;
+        int currentStone = stone;
+        int currentBrick = brick;
+        int currentWood = wood;
+
         foreach (GameObject village in villages)
         {
             foreach (GameObject tile in village.GetComponent<Village>().tiles)
@@ -260,8 +290,24 @@ public class PlayerScript : MonoBehaviour
             }
         }
         UpdateResources();
+
+        GainedResources.Brick = brick - currentBrick;
+        GainedResources.Sheep = sheep - currentSheep;
+        GainedResources.Stone = stone - currentStone;
+        GainedResources.Wheat = wheat - currentWheat;
+        GainedResources.Wood = wood - currentWood;
     }
 
+
+    /// <summary>
+    /// Resources gained for existing villages (only occurs in the second round in this implementation).
+    /// </summary>
+    public PlayerResources VillageGainedResources { get; private set; } = new PlayerResources();
+
+    /// <summary>
+    /// Resources gained by diceroll within the current turn.
+    /// </summary>
+    public PlayerResources GainedResources { get; } = new PlayerResources();
     /**
      * Siedlung bauen, funktioniert nur, wenn der Spieler, die Voraussetzungen erfüllt
      */
@@ -276,7 +322,8 @@ public class PlayerScript : MonoBehaviour
                 sheep--;
                 wheat--;
                 freeBuildRoad = false;
-            } else
+            }
+            else
             {
                 freeBuild = false;
                 freeBuildRoad = true;
@@ -336,8 +383,8 @@ public class PlayerScript : MonoBehaviour
      */
     public GameObject BuildRoad(Vector3 position, Quaternion rotation)
     {
-        if (freeBuildRoad || this.HasResourcesForRoad()) 
-        { 
+        if (freeBuildRoad || this.HasResourcesForRoad())
+        {
 
             if (!freeBuildRoad)
             {
@@ -381,7 +428,7 @@ public class PlayerScript : MonoBehaviour
         if (roads.Count > 0)
         {
             List<int> roadLengths = new List<int>();
-            foreach(GameObject road in roads)
+            foreach (GameObject road in roads)
             //for (int i = 0; i < roads.Count; i++)
             {
                 roadsModified = new List<GameObject>(roads);
@@ -423,7 +470,7 @@ public class PlayerScript : MonoBehaviour
                 roadsModified.Remove(r);
                 roadsUpdated.Add(r);
                 neighbors++;
-            } 
+            }
             else
             {
                 i++;
@@ -477,7 +524,7 @@ public class PlayerScript : MonoBehaviour
             }
             else if (plan.actions[i].GetType() == typeof(BuildVillage))
             {
-                BuildVillage buildvillage = (BuildVillage) plan.actions[i];
+                BuildVillage buildvillage = (BuildVillage)plan.actions[i];
                 //Debug.Log("row" + buildvillage.row);
                 //Debug.Log("row" + buildvillage.column);
                 if (gm.map.getVillagePlaceByPosition(buildvillage.row, buildvillage.column).gameObject.activeSelf)
@@ -488,7 +535,7 @@ public class PlayerScript : MonoBehaviour
             else if (plan.actions[i].GetType() == typeof(Assets.Scripts.CBR.Plan.BuildCity))
             {
 
-                Assets.Scripts.CBR.Plan.BuildCity buildcity = (Assets.Scripts.CBR.Plan.BuildCity) plan.actions[i];
+                Assets.Scripts.CBR.Plan.BuildCity buildcity = (Assets.Scripts.CBR.Plan.BuildCity)plan.actions[i];
                 //Debug.Log("row" + buildcity.row);
                 //Debug.Log("row" + buildcity.column);
                 if (gm.map.getCityPlaceByPosition(buildcity.row, buildcity.column).gameObject.activeSelf)
@@ -498,7 +545,7 @@ public class PlayerScript : MonoBehaviour
             }
             else if (plan.actions[i].GetType() == typeof(Assets.Scripts.CBR.Plan.BuildRoad))
             {
-                Assets.Scripts.CBR.Plan.BuildRoad buildroad = (Assets.Scripts.CBR.Plan.BuildRoad) plan.actions[i];
+                Assets.Scripts.CBR.Plan.BuildRoad buildroad = (Assets.Scripts.CBR.Plan.BuildRoad)plan.actions[i];
                 //Debug.Log("row" + buildroad.row);
                 //Debug.Log("row" + buildroad.column);
                 if (gm.map.getRoadPlaceByPosition(buildroad.row, buildroad.column).gameObject.activeSelf)

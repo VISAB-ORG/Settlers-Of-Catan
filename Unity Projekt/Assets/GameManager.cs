@@ -11,8 +11,11 @@ using Assets.Scripts.Utility;
 using Assets.Scripts.CBR.Model;
 using Assets.Scripts.Model;
 using Assets.Scripts.CBR.Plan;
+using Assets.Scripts.VISAB;
+using VISABConnector;
 using System.Threading;
 using System.Diagnostics.Tracing;
+using System.Linq;
 
 /**
  * Klasse, zum Steuern des Spielflusses. 
@@ -20,6 +23,13 @@ using System.Diagnostics.Tracing;
  */
 public class GameManager : MonoBehaviour
 {
+
+    /// <summary>
+    /// Represents the current state of the game
+    /// Might rename to GameState
+    /// </summary>
+    public static GameInformation GameInformation { get; private set; }
+
     public MapGeneratorScript mapGenerator;
 
     public PlayerScript player1, player2;
@@ -56,8 +66,11 @@ public class GameManager : MonoBehaviour
     public int tempRow = 0;
     public int tempColumn = 0;
 
-    private float enableEndTurnWait = 0.3f, addResourcesWait=0.2f, MakeAiTurnWait=1f, MakeAiMainTurnWait=2f;
+    private float enableEndTurnWait = 0.3f, addResourcesWait = 0.2f, MakeAiTurnWait = 1f, MakeAiMainTurnWait = 2f;
     private bool isSpeedUp = true;
+
+    public static int turn { get; set; } = 0;
+    public static string turnTimeStamp { get; set; } = "";
 
     public int counter = 1;
 
@@ -66,6 +79,8 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
+        Time.timeScale = 5;
+
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
@@ -84,12 +99,14 @@ public class GameManager : MonoBehaviour
         player2.SetGameManager(this);
         UpdateActivePlayer(player1);
 
-        if (isSpeedUp) {
+        if (isSpeedUp)
+        {
             enableEndTurnWait = 0.1f;
-            addResourcesWait = 0.05f; 
-            MakeAiTurnWait = 0.4f; 
+            addResourcesWait = 0.05f;
+            MakeAiTurnWait = 0.4f;
             MakeAiMainTurnWait = 0.5f;
-        } else
+        }
+        else
         {
             enableEndTurnWait = 4f;
             addResourcesWait = 3f;
@@ -99,6 +116,20 @@ public class GameManager : MonoBehaviour
 
         lateStart = true;
     }
+
+    private void SetGameInformation()
+    {
+        if (GameInformation == null)
+            GameInformation = new GameInformation();
+
+        GameInformation.TurnCounter = turn;
+        GameInformation.TurnTimeStamp = turnTimeStamp;
+        GameInformation.RoadRange = roadRange;
+        GameInformation.Players = new List<PlayerScript> { player1, player2 };
+        GameInformation.ActivePlayer = activePlayer;
+    }
+
+
 
     /**
      * Einige Anweisungen können erst nach der Start-Methode ausgeführt werden, auch wenn sie zu Beginn des Spiels nötig sind. 
@@ -128,6 +159,20 @@ public class GameManager : MonoBehaviour
             map.cityBuildPlaces.Add(cityPlace.GetComponent<BuildCity>().cityPlace);
         }
 
+        Time.timeScale = 20;
+
+        UnityEngine.Debug.Log(LayerMask.NameToLayer("ashkfj"));
+
+        // VISAB
+        SetGameInformation();
+
+        RoundBasedSession.MessageAddedEvent += UnityEngine.Debug.Log;
+
+        var metaInformation = VISABHelper.GetMetaInformation();
+        RoundBasedSession.StartSessionAsync(metaInformation, VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
+
+        VISABHelper.MakeSnapshots();
+
         //Nun kann der erste Zug von Spieler 1 ausgeführt werden
         activePlayer.FirstTurn();
         StartAIProcess();
@@ -140,10 +185,10 @@ public class GameManager : MonoBehaviour
     private void MakeAiTurn(float delay)
     {
         StartCoroutine(ActivateAi(delay));
-        StartCoroutine(ActivateAi(delay*2));
-        StartCoroutine(ActivateAi(delay*3));
-        StartCoroutine(ActivateAi(delay*4));
-        StartCoroutine(ActivateAi(delay*5));
+        StartCoroutine(ActivateAi(delay * 2));
+        StartCoroutine(ActivateAi(delay * 3));
+        StartCoroutine(ActivateAi(delay * 4));
+        StartCoroutine(ActivateAi(delay * 5));
     }
 
     /**
@@ -163,7 +208,8 @@ public class GameManager : MonoBehaviour
         Response response = SendToAI(endTurnBtn.interactable, rollDiceBtn.interactable);
         Plan plan = response.plan;
         plan.StringToActions();
-       // UnityEngine.Debug.Log("Plan " + plan.ToString());
+        // UnityEngine.Debug.Log("Plan " + plan.ToString());
+        plan.actions.ForEach(x => activePlayer.CurrentPlanActions.Add(x.name));
         activePlayer.FulfillPlan(plan);
     }
 
@@ -177,10 +223,12 @@ public class GameManager : MonoBehaviour
         Response response = SendToAI(endTurnBtn.interactable, rollDiceBtn.interactable);
         Plan plan = response.plan;
         plan.StringToActions();
+        plan.actions.ForEach(x => activePlayer.CurrentPlanActions.Add(x.name));
         //UnityEngine.Debug.Log("Plan " + plan.ToString());
 
         bool wantsToEndTurn = false;
-        for (int i = 0; i < plan.actions.Count; i++) {
+        for (int i = 0; i < plan.actions.Count; i++)
+        {
             if (plan.actions[i].GetType() == typeof(EndTurn))
             {
                 wantsToEndTurn = true;
@@ -191,7 +239,7 @@ public class GameManager : MonoBehaviour
         if (!wantsToEndTurn)
         {
             StartCoroutine(ActivateAiMainTurn(MakeAiMainTurnWait));
-        }   
+        }
     }
 
     /**
@@ -454,6 +502,13 @@ public class GameManager : MonoBehaviour
                 endTurnBtn.interactable = true;
         }
     }
+    /**
+      * Diese Unity-Methode wird beim Verlassen des Programms ausgeführt. Hier wird die Java-CBR Applikation beendet.
+      */
+    private void OnApplicationQuit()
+    {
+        RoundBasedSession.CloseSessionAsync().Wait();
+    }
 
     /**
      * Methode, die Bauplätze, die zu nah an der nächsten Siedlung liegen zerstört.
@@ -485,7 +540,7 @@ public class GameManager : MonoBehaviour
         rollDiceBtn.interactable = false;
 
         //Nachdem gewürfelt wurde, werden die Ressourcen aktualisiert und der Zug darf beendet werden
-        StartCoroutine(AddResources()); 
+        StartCoroutine(AddResources());
         StartCoroutine(EnableEndTurn());
     }
 
@@ -498,7 +553,7 @@ public class GameManager : MonoBehaviour
         return Vector3.Lerp(spawnPoint.transform.position, rollTarget, 1).normalized * (-35 - UnityEngine.Random.value * 20);
     }
 
-   
+
     /**
      * Hinzufügen der Ressourcen nach dem Würfeln
      */
@@ -515,8 +570,8 @@ public class GameManager : MonoBehaviour
         {
             number = Dice.GetValue("");
         }
-        
-        
+
+        GameInformation.DiceNumberRolled = number;
         player1.CollectResources(number);
         player2.CollectResources(number);
         activePlayer.UpdateResources();
@@ -538,6 +593,12 @@ public class GameManager : MonoBehaviour
      */
     public void OnEndTurn()
     {
+        turn++;
+        turnTimeStamp = DateTime.Now.ToString("HH:mm:ss");
+        SetGameInformation();
+        var statistics = VISABHelper.GetStatistics();
+        var result = RoundBasedSession.SendStatisticsAsync(statistics).Result;
+
         if (activePlayer.victoryPoints >= 10)
         {
             gameOverText.text = "Spiel beendet! Spieler " + ((activePlayer == player1) ? "1" : "2") + " hat gewonnen!"; //Sieger anzeigen
@@ -550,6 +611,8 @@ public class GameManager : MonoBehaviour
                 + "\nSiegpunkte Spieler 2: " + player2.victoryPoints
                 + "\nSieger: " + name);
 
+            UnityEngine.Debug.Log("Closing VISAB session due to end of match.");
+            RoundBasedSession.CloseSessionAsync().Wait();
         }
         else
         {
@@ -611,7 +674,7 @@ public class GameManager : MonoBehaviour
     {
         Situation situation = new Situation(activePlayer.getName(), new Status(map, activePlayer.isFirstTurn, activePlayer.isSecondTurn, activePlayer.victoryPoints,
             activePlayer.longestRoad, activePlayer.hasLongestRoad, activePlayer.brick, activePlayer.wheat, activePlayer.stone, activePlayer.wood,
-            activePlayer.sheep, activePlayer.freeBuild, activePlayer.freeBuildRoad, activePlayer.villages, activePlayer.roads, isAbledToEndTurn, allowedToRollDice, 
+            activePlayer.sheep, activePlayer.freeBuild, activePlayer.freeBuildRoad, activePlayer.villages, activePlayer.roads, isAbledToEndTurn, allowedToRollDice,
             SimulateVillagePlaceActivation(), SimulateRoadPlaceActivation()));
 
         Request request = new Request(situation);
@@ -641,7 +704,7 @@ public class GameManager : MonoBehaviour
         {
             return true;
         }
-        else 
+        else
         {
             villagePlaces.SetActive(true);
             foreach (GameObject road in activePlayer.roads)
@@ -651,7 +714,7 @@ public class GameManager : MonoBehaviour
                 {
                     Transform child = transform.GetChild(i);
                     float distance = (road.transform.position - child.position).magnitude;
-                    if (distance < roadRange) 
+                    if (distance < roadRange)
                     {
                         villagePlaces.SetActive(focusState);
                         return true;
@@ -729,12 +792,14 @@ public class GameManager : MonoBehaviour
             player1.hasLongestRoad = true;
             player2.hasLongestRoad = false;
             player1.victoryPoints += 2;
-        } else if (player1.longestRoad < player2.longestRoad)
+        }
+        else if (player1.longestRoad < player2.longestRoad)
         {
             player2.hasLongestRoad = true;
             player1.hasLongestRoad = false;
             player2.victoryPoints += 2;
-        } else
+        }
+        else
         {
             player1.hasLongestRoad = false;
             player2.hasLongestRoad = false;

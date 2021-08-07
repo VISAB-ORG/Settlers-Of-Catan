@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VISABConnector.Unity</name>
+    </assembly>
+    <members>
+        <member name="F:VISABConnector.Unity.CameraCreator.CameraName">
+            <summary>
+            The name of the camera that is created by us, if no camera is given.
+            </summary>
+        </member>
+        <member name="T:VISABConnector.Unity.ImageCreator">
+            <summary>
+            TODO: Smart Instantiate
+            </summary>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.TakeSnapshot(VISABConnector.Unity.SnapshotConfiguration)">
+            <summary>
+            TODO: A bunch of dumb arguments checking TODO: You may also pass an existing camera.
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.TakeSnapshots(System.Collections.Generic.IEnumerable{VISABConnector.Unity.SnapshotConfiguration})">
+            <summary>
+            TODO: You may also pass an existing camera.
+            </summary>
+            <param name="configs"></param>
+            <param name="camera"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.InstantiateGameObject(VISABConnector.Unity.InstantiationConfiguration)">
+            <summary>
+            Instantiates a GameObject based on the given configuration and returns the instance.
+            </summary>
+            <param name="config">The configuration based on which the GameObject will be instantiated</param>
+            <returns>The instance for the given configuration</returns>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.SetLayerRecursively(UnityEngine.GameObject,System.Int32)">
+            <summary>
+            Assigns Layer to all children of gameobjects
+            </summary>
+            <param name="obj"></param>
+            <param name="layer"></param>
+        </member>
+        <member name="M:VISABConnector.Unity.SnapshotConfiguration.#ctor">
+            <summary>
+            TODO: Really not name? GameObject.Find has a parameter with name that is used by us
+            </summary>
+        </member>
+    </members>
+</doc>
