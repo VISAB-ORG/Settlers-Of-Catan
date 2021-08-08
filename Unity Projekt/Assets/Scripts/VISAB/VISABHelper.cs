@@ -128,6 +128,7 @@ namespace Assets.Scripts.VISAB
                 {
                     CameraOffset = .5f,
                     Orthographic = false,
+                    CameraRotation = new Vector3(90, 0, 0)
                 }
             };
 
@@ -142,11 +143,12 @@ namespace Assets.Scripts.VISAB
                 {
                     CameraOffset = 0.1f,
                     Orthographic = true,
-                    OrthographicSize = 5
+                    OrthographicSize = 5,
+                    CameraRotation = new Vector3(90, 180, 0)
                 },
                 GameObjectId = "Map",
                 ImageHeight = 1024,
-                ImageWidth = 1024
+                ImageWidth = 1024,
             };
             var map = ImageCreator.TakeSnapshot(mapConfig);
 
@@ -193,6 +195,7 @@ namespace Assets.Scripts.VISAB
                     bounds.Encapsulate(renderers[i].bounds);
                 }
             }
+
             return bounds;
         }
     }
