@@ -171,7 +171,9 @@ public class GameManager : MonoBehaviour
         var metaInformation = VISABHelper.GetMetaInformation();
         RoundBasedSession.StartSessionAsync(metaInformation, VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
 
-        VISABHelper.MakeSnapshots();
+        var images = VISABHelper.MakeSnapshots();
+        RoundBasedSession.SendImagesAsync(images).Wait();
+
 
         //Nun kann der erste Zug von Spieler 1 ausgeführt werden
         activePlayer.FirstTurn();

@@ -152,17 +152,16 @@ namespace Assets.Scripts.VISAB
             };
             var map = ImageCreator.TakeSnapshot(mapConfig);
 
-            File.WriteAllBytes("map.png", map);
+            //File.WriteAllBytes("map.png", map);
 
             images.CityImage = city;
             images.StreetImage = street;
             images.VillageImage = village;
+            images.MapImage = map;
 
-            Debug.Log(JsonConvert.SerializeObject(images));
-
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
+            //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
+            //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
+            //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
 
             return images;
         }

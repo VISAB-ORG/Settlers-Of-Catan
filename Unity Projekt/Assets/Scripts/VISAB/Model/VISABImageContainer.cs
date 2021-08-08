@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using VISABConnector;
 
 namespace Assets.Scripts.VISAB
 {
-    public class VISABImageContainer
+    public class VISABImageContainer : IImageContainer
     {
         public byte[] MapImage { get; set; }
 
