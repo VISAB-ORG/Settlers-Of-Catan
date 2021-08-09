@@ -91,6 +91,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void FirstTurn()
     {
+        GainedResources = new PlayerResources();
+
         CurrentPlanActions.Clear();
 
         /*brick = 5;
@@ -109,6 +111,8 @@ public class PlayerScript : MonoBehaviour
      */
     public void SecondTurn()
     {
+        GainedResources = new PlayerResources();
+
         CurrentPlanActions.Clear();
 
         AdjustCamera();
@@ -123,9 +127,10 @@ public class PlayerScript : MonoBehaviour
      */
     public void Turn()
     {
+        GainedResources = new PlayerResources();
+
         CurrentPlanActions.Clear();
 
-        VillageGainedResources = new PlayerResources();
         AdjustCamera();
         freeBuild = false;
         freeBuildRoad = false;
@@ -208,14 +213,12 @@ public class PlayerScript : MonoBehaviour
         }
         UpdateResources();
 
-        VillageGainedResources.Brick = brick - currentBrick;
-        VillageGainedResources.Sheep = sheep - currentSheep;
-        VillageGainedResources.Stone = stone - currentStone;
-        VillageGainedResources.Wheat = wheat - currentWheat;
-        VillageGainedResources.Wood = wood - currentWood;
+        GainedResources.Brick += brick - currentBrick;
+        GainedResources.Sheep += sheep - currentSheep;
+        GainedResources.Stone += stone - currentStone;
+        GainedResources.Wheat += wheat - currentWheat;
+        GainedResources.Wood += wood - currentWood;
     }
-
-
 
     /*
      * Sammeln von Ressourcen für eine bestimmte Nummer
@@ -291,23 +294,18 @@ public class PlayerScript : MonoBehaviour
         }
         UpdateResources();
 
-        GainedResources.Brick = brick - currentBrick;
-        GainedResources.Sheep = sheep - currentSheep;
-        GainedResources.Stone = stone - currentStone;
-        GainedResources.Wheat = wheat - currentWheat;
-        GainedResources.Wood = wood - currentWood;
+        GainedResources.Brick += brick - currentBrick;
+        GainedResources.Sheep += sheep - currentSheep;
+        GainedResources.Stone += stone - currentStone;
+        GainedResources.Wheat += wheat - currentWheat;
+        GainedResources.Wood += wood - currentWood;
     }
 
 
     /// <summary>
-    /// Resources gained for existing villages (only occurs in the second round in this implementation).
-    /// </summary>
-    public PlayerResources VillageGainedResources { get; private set; } = new PlayerResources();
-
-    /// <summary>
     /// Resources gained by diceroll within the current turn.
     /// </summary>
-    public PlayerResources GainedResources { get; } = new PlayerResources();
+    public PlayerResources GainedResources { get; set; }
     /**
      * Siedlung bauen, funktioniert nur, wenn der Spieler, die Voraussetzungen erfüllt
      */

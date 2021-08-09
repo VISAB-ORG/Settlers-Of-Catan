@@ -62,7 +62,6 @@ namespace Assets.Scripts.VISAB
                 VictoryPoints = player.victoryPoints,
                 IsMyTurn = gameInformation.ActivePlayer == player,
                 ResourcesGained = player.GainedResources,
-                VillageResourcesGained = player.VillageGainedResources
             };
         }
 
