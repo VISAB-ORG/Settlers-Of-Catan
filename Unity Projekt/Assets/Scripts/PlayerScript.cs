@@ -305,7 +305,8 @@ public class PlayerScript : MonoBehaviour
     /// <summary>
     /// Resources gained by diceroll within the current turn.
     /// </summary>
-    public PlayerResources GainedResources { get; set; }
+    public PlayerResources GainedResources { get; set; } = new PlayerResources();
+
     /**
      * Siedlung bauen, funktioniert nur, wenn der Spieler, die Voraussetzungen erfüllt
      */
