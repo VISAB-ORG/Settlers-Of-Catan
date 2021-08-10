@@ -154,8 +154,11 @@ namespace Assets.Scripts.VISAB
             //File.WriteAllBytes("map.png", map);
 
             images.CityImage = city;
+            images.CityAnnotation = "C";
             images.StreetImage = street;
+            images.StreetAnnotation = "S";
             images.VillageImage = village;
+            images.VillageAnnotation = "V";
             images.MapImage = map;
 
             //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
