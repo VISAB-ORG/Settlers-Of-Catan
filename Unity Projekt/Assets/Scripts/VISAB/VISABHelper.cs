@@ -122,7 +122,7 @@ namespace Assets.Scripts.VISAB
                 {
                     SpawnLocation = new Vector3(100, 100, 100),
                     PrefabPath = prefabPath,
-                    SpawnRotation = new Vector3(-90, 0, 0)
+                    SpawnRotation = new Vector3(0, 0, 0)
                 },
                 CameraConfiguration = new CameraConfiguration
                 {
@@ -131,11 +131,6 @@ namespace Assets.Scripts.VISAB
                     CameraRotation = new Vector3(90, 0, 0)
                 }
             };
-
-            var images = new VISABImageContainer();
-            var city = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/City"));
-            var street = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/Road"));
-            var village = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/Village"));
 
             var mapConfig = new SnapshotConfiguration
             {
@@ -150,15 +145,30 @@ namespace Assets.Scripts.VISAB
                 ImageHeight = 1024,
                 ImageWidth = 1024,
             };
+
             var map = ImageCreator.TakeSnapshot(mapConfig);
 
+            var cityConfig = defaultInstantiate("Prefabs/City");
+            cityConfig.CameraConfiguration.CameraOffset = 1.5f;
+            var city = ImageCreator.TakeSnapshot(cityConfig);
+
+            var streetConfig = defaultInstantiate("Prefabs/Road");
+            streetConfig.CameraConfiguration.CameraOffset = 2f;
+            var street = ImageCreator.TakeSnapshot(streetConfig);
+
+            var villageConfig = defaultInstantiate("Prefabs/Village");
+            villageConfig.CameraConfiguration.CameraOffset = 1.75f;
+            var village = ImageCreator.TakeSnapshot(villageConfig);
+
+            var images = new VISABImageContainer
+            {
+                CityImage = city,
+                StreetImage = street,
+                VillageImage = village,
+                MapImage = map
+            };
+
             File.WriteAllBytes("map.png", map);
-
-            images.CityImage = city;
-            images.StreetImage = street;
-            images.VillageImage = village;
-            images.MapImage = map;
-
             File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
             File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
             File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
