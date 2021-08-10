@@ -163,8 +163,11 @@ namespace Assets.Scripts.VISAB
             var images = new VISABImageContainer
             {
                 CityImage = city,
+                CityAnnotation = "C",
                 StreetImage = street,
+                StreetAnnotation = "S",
                 VillageImage = village,
+                VillageAnnotation = "V",
                 MapImage = map
             };
 
