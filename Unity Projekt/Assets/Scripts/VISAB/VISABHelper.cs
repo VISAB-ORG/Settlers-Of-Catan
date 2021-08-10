@@ -73,8 +73,8 @@ namespace Assets.Scripts.VISAB
                 var position = gameObject.transform.position;
                 var vector2Pos = new Model.Vector2
                 {
-                    X = (int)position.x,
-                    Y = (int)position.z
+                    X = (double)position.x,
+                    Y = (double)position.z
                 };
                 list.Add(vector2Pos);
             }
@@ -184,12 +184,12 @@ namespace Assets.Scripts.VISAB
             var map = GameObject.Find("Map");
 
             var bounds = map.GetBoundsWithChildren();
-            var anchorPoint = new Model.Vector2 { X = (int)bounds.min.x, Y = (int)bounds.min.z };
+            var anchorPoint = new Model.Vector2 { X = (double)bounds.min.x, Y = (double)bounds.min.z };
 
             return new MapRectangle
             {
-                Height = (int)bounds.size.z,
-                Width = (int)bounds.size.x,
+                Height = (double)bounds.size.z,
+                Width = (double)bounds.size.x,
                 TopLeftAnchorPoint = anchorPoint
             };
         }
