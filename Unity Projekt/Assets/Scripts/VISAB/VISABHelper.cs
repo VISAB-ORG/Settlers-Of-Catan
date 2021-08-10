@@ -121,11 +121,12 @@ namespace Assets.Scripts.VISAB
                 InstantiationSettings = new InstantiationConfiguration
                 {
                     SpawnLocation = new Vector3(100, 100, 100),
-                    PrefabPath = prefabPath
+                    PrefabPath = prefabPath,
+                    SpawnRotation = new Vector3(-90, 0, 0)
                 },
                 CameraConfiguration = new CameraConfiguration
                 {
-                    CameraOffset = .5f,
+                    CameraOffset = 1f,
                     Orthographic = false,
                     CameraRotation = new Vector3(90, 0, 0)
                 }
@@ -151,16 +152,16 @@ namespace Assets.Scripts.VISAB
             };
             var map = ImageCreator.TakeSnapshot(mapConfig);
 
-            //File.WriteAllBytes("map.png", map);
+            File.WriteAllBytes("map.png", map);
 
             images.CityImage = city;
             images.StreetImage = street;
             images.VillageImage = village;
             images.MapImage = map;
 
-            //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
-            //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
-            //File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
+            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
+            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
+            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
 
             return images;
         }
