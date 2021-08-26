@@ -6,8 +6,9 @@
     <members>
         <member name="T:VISABConnector.ApiResponse`1">
             <summary>
-            Is returned when requests to the VISAB WebApi are made.
+            Represents a response that is made by the VISAB WebApi.
             </summary>
+            <typeparam name="T">The type of the content</typeparam>
         </member>
         <member name="P:VISABConnector.ApiResponse`1.Content">
             <summary>
@@ -24,14 +25,86 @@
             Whether the request was successful.
             </summary>
         </member>
+        <member name="T:VISABConnector.IImageContainer">
+            <summary>
+            The marker interface all classes representing a container of images have to implement.
+            </summary>
+        </member>
+        <member name="T:VISABConnector.SessionStatus">
+            <summary>
+            Represents the status of a transmission session at the VISAB WebApi.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.SessionId">
+            <summary>
+            The Id of the session.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.Game">
+            <summary>
+            The game of the session.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.IsActive">
+            <summary>
+            Whether the session is active.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.TotalRequests">
+            <summary>
+            The total count of requests that were made by the session.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.ReceivedStatistics">
+            <summary>
+            The total count of requests for sending statistics that were made by the session.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.ReceivedImages">
+            <summary>
+            The total count of requests for sending images that were made by the session.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.Ip">
+            <summary>
+            The ip of the machine that opened the session.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.SessionOpened">
+            <summary>
+            The time at which the session was opened.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.SessionClosed">
+            <summary>
+            The time at which the session was closed.
+            </summary>
+        </member>
+        <member name="P:VISABConnector.SessionStatus.LastRequest">
+            <summary>
+            The time at which the last request was made by the session.
+            </summary>
+        </member>
         <member name="T:VISABConnector.LoopBasedSession">
             <summary>
             A wrapper class for communicating with the VISAB WebApi in games that sent data continously.
             </summary>
         </member>
+        <member name="P:VISABConnector.LoopBasedSession.Session">
+            <summary>
+            The underylying session that is used.
+            </summary>
+        </member>
+        <member name="E:VISABConnector.LoopBasedSession.FileReceivedEvent">
+            <summary>
+            Event that will be invoked when a saved file is received.
+            The argument is the json string of the saved file.
+            </summary>
+        </member>
         <member name="E:VISABConnector.LoopBasedSession.MessageAddedEvent">
             <summary>
             Event that will be invoked when a log message should be written.
+            The argument contains the message.
             </summary>
         </member>
         <member name="P:VISABConnector.LoopBasedSession.SavedFile">
@@ -52,7 +125,7 @@
             </summary>
             <returns>The written json file if successfully retrieved, empty string else</returns>
         </member>
-        <member name="M:VISABConnector.LoopBasedSession.SendImagesAsync(VISABConnector.IImage)">
+        <member name="M:VISABConnector.LoopBasedSession.SendImagesAsync(VISABConnector.IImageContainer)">
             <summary>
             Sends images using the current session.
             </summary>
@@ -79,7 +152,7 @@
             <param name="requestTimeout">The request timeout to use</param>
             <returns>True if session was started</returns>
         </member>
-        <member name="M:VISABConnector.LoopBasedSession.StartStatisticsLoopAsync(System.Func{VISABConnector.IVISABStatistics},System.Func{System.Boolean},System.Int32,System.Threading.CancellationToken,System.Boolean,System.Boolean)">
+        <member name="M:VISABConnector.LoopBasedSession.StartStatisticsLoopAsync(System.Func{VISABConnector.IStatistics},System.Func{System.Boolean},System.Int32,System.Threading.CancellationToken,System.Boolean,System.Boolean)">
             <summary>
             Starts an infinite loop of sending statistics to VISAB WebApi. This loop is cancelled if
             the cancellationToken is. After the loop is cancelled, closes the internal session with
@@ -99,27 +172,27 @@
             </param>
             <param name="queryFile">Whether to query the created file after the session was closed</param>
         </member>
-        <member name="M:VISABConnector.LoopBasedSession.SendStatisticsAsync(VISABConnector.IVISABStatistics)">
+        <member name="M:VISABConnector.LoopBasedSession.SendStatisticsAsync(VISABConnector.IStatistics)">
             <summary>
             Sends statistics using the current session.
             </summary>
             <param name="statistics">The statistics to send</param>
             <returns>True if successfully sent</returns>
         </member>
-        <member name="T:VISABConnector.MessageConsumer">
-            <summary>
-            The message consumer delegate type.
-            </summary>
-            <param name="message"></param>
-        </member>
         <member name="T:VISABConnector.RoundBasedSession">
             <summary>
             A wrapper class for communicating with the VISAB WebApi in round based games.
             </summary>
         </member>
+        <member name="P:VISABConnector.RoundBasedSession.Session">
+            <summary>
+            The underylying session that is used.
+            </summary>
+        </member>
         <member name="E:VISABConnector.RoundBasedSession.MessageAddedEvent">
             <summary>
             Event that will be invoked when a log message should be written.
+            The argument contains the message.
             </summary>
         </member>
         <member name="M:VISABConnector.RoundBasedSession.CloseSessionAsync">
@@ -134,14 +207,14 @@
             </summary>
             <returns>The written json file if successfully retrieved, empty string else</returns>
         </member>
-        <member name="M:VISABConnector.RoundBasedSession.SendImagesAsync(VISABConnector.IImage)">
+        <member name="M:VISABConnector.RoundBasedSession.SendImagesAsync(VISABConnector.IImageContainer)">
             <summary>
             Sends images using the current session.
             </summary>
             <param name="image">The image to send</param>
             <returns>True if successfully sent</returns>
         </member>
-        <member name="M:VISABConnector.RoundBasedSession.SendStatisticsAsync(VISABConnector.IVISABStatistics)">
+        <member name="M:VISABConnector.RoundBasedSession.SendStatisticsAsync(VISABConnector.IStatistics)">
             <summary>
             Sends statistics using the current session.
             </summary>
@@ -168,19 +241,9 @@
             <param name="requestTimeout">The request timeout to use</param>
             <returns>True if session was started</returns>
         </member>
-        <member name="T:VISABConnector.IImage">
-            <summary>
-            The marker interface all classes used for sending images have to implement.
-            </summary>
-        </member>
         <member name="T:VISABConnector.IVISABSession">
             <summary>
-            Class that provides access the functionality provided by a transmission session at the VISAB WebApi.
-            </summary>
-        </member>
-        <member name="E:VISABConnector.IVISABSession.CloseSessionEvent">
-            <summary>
-            Event that is invoked before closing the session.
+            Interface that represents a transmission session at the VISAB WebApi and provides functionality for it.    
             </summary>
         </member>
         <member name="P:VISABConnector.IVISABSession.Game">
@@ -203,27 +266,27 @@
             The unique identifier for the current session.
             </summary>
         </member>
-        <member name="M:VISABConnector.IVISABSession.CloseSession">
+        <member name="M:VISABConnector.IVISABSession.CloseSessionAsync">
             <summary>
             Closes the session at the VISAB WebApi.
             </summary>
             <returns>An ApiResponse object</returns>
         </member>
-        <member name="M:VISABConnector.IVISABSession.GetCreatedFile">
+        <member name="M:VISABConnector.IVISABSession.GetCreatedFileAsync">
             <summary>
             Queries the file that was created by VISAB for the session. Only works if the session
             was closed before.
             </summary>
             <returns>An ApiResponse object with the file as a json string in the content</returns>
         </member>
-        <member name="M:VISABConnector.IVISABSession.SendImage(VISABConnector.IImage)">
+        <member name="M:VISABConnector.IVISABSession.SendImagesAsync(VISABConnector.IImageContainer)">
             <summary>
             Sends a image object to the VISAB WebApi.
             </summary>
             <param name="image">The image object of type T</param>
             <returns>An ApiResponse object</returns>
         </member>
-        <member name="M:VISABConnector.IVISABSession.SendStatistics(VISABConnector.IVISABStatistics)">
+        <member name="M:VISABConnector.IVISABSession.SendStatisticsAsync(VISABConnector.IStatistics)">
             <summary>
             Sends a statistics object to the VISAB WebApi.
             </summary>
@@ -235,19 +298,9 @@
             Properties decorated with this Attribute wont be serialized.
             </summary>
         </member>
-        <member name="T:VISABConnector.ClosingEventArgs">
-            <summary>
-            Event args for when the IVISABSession being closed.
-            </summary>
-        </member>
-        <member name="P:VISABConnector.ClosingEventArgs.RequestHandler">
-            <summary>
-            The RequestHandler currently in use by the IVISABSession object.
-            </summary>
-        </member>
         <member name="T:VISABConnector.Default">
             <summary>
-            Contains default values used for communication with the VISAB WebApi.
+            Default values used for communication with the VISAB WebApi.
             </summary>
         </member>
         <member name="F:VISABConnector.Default.ContentMediaType">
@@ -280,14 +333,14 @@
             Used for making Http requests to the VISAB WebApi.
             </summary>
         </member>
-        <member name="M:VISABConnector.IVISABRequestHandler.AddDefaultHeader(System.String,System.Object)">
+        <member name="M:VISABConnector.IVISABRequestHandler.AddDefaultHeader(System.String,System.String)">
             <summary>
             Adds an attribute value pair to the default request header.
             </summary>
             <param name="name">The name of the attribute</param>
             <param name="value">The value of the attribute</param>
         </member>
-        <member name="M:VISABConnector.IVISABRequestHandler.GetDeserializedResponseAsync``1(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+        <member name="M:VISABConnector.IVISABRequestHandler.GetDeserializedResponseAsync``1(System.Net.Http.HttpMethod,System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Makes a request to the VISAB WebApi and deserialiazes the responses content.
             </summary>
@@ -301,12 +354,11 @@
             has the default value of TResponse.
             </returns>
         </member>
-        <member name="M:VISABConnector.IVISABRequestHandler.GetDeserializedResponseAsync``2(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},``0)">
+        <member name="M:VISABConnector.IVISABRequestHandler.GetDeserializedResponseAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Makes a request to the VISAB WebApi and deserialiazes the responses content. The given
             body object is serialized into a json string before sending.
             </summary>
-            <typeparam name="TBody">The type of the body to serialize</typeparam>
             <typeparam name="TResponse">The type to deserialize into</typeparam>
             <param name="httpMethod">The HttpMethod used for the request</param>
             <param name="relativeUrl">The relative url for the request</param>
@@ -317,7 +369,7 @@
             has the default value of TResponse.
             </returns>
         </member>
-        <member name="M:VISABConnector.IVISABRequestHandler.GetResponseAsync(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+        <member name="M:VISABConnector.IVISABRequestHandler.GetResponseAsync(System.Net.Http.HttpMethod,System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Makes a request to the VISAB WebApi.
             </summary>
@@ -329,7 +381,7 @@
             A ApiResponse object with set content if successful. Content is null if not successful.
             </returns>
         </member>
-        <member name="M:VISABConnector.IVISABRequestHandler.GetResponseAsync``1(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},``0)">
+        <member name="M:VISABConnector.IVISABRequestHandler.GetResponseAsync(System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Makes a request to the VISAB WebApi. The given body object is serialized into a json
             string before sending.
@@ -347,24 +399,23 @@
             Base class used for making Http requests. Classes making Http requests should inherit from this.
             </summary>
         </member>
-        <member name="F:VISABConnector.Http.RequestHandlerBase.httpClient">
+        <member name="F:VISABConnector.Http.RequestHandlerBase._httpClient">
             <summary>
             The used HttpClient.
             </summary>
         </member>
-        <member name="F:VISABConnector.Http.RequestHandlerBase.requestTimeout">
+        <member name="F:VISABConnector.Http.RequestHandlerBase._requestTimeout">
             <summary>
             The timeout for requests in seconds.
             </summary>
         </member>
         <member name="M:VISABConnector.Http.RequestHandlerBase.#ctor(System.String,System.Int32)">
             <summary>
-            Initializes a RequestHandlerBase instance.
             </summary>
             <param name="baseAdress">The base adress for the HttpClient</param>
             <param name="requestTimeout">The timeout for requests in seconds</param>
         </member>
-        <member name="M:VISABConnector.Http.RequestHandlerBase.GetHttpResponseAsync(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+        <member name="M:VISABConnector.Http.RequestHandlerBase.GetHttpResponseAsync(System.Net.Http.HttpMethod,System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Makes a http request and gets the HttpResponseMessage object.
             </summary>
@@ -374,7 +425,7 @@
             <param name="body">The requests body</param>
             <returns>The HttpResponseMessage object</returns>
         </member>
-        <member name="M:VISABConnector.Http.RequestHandlerBase.BuildParameterizedUrl(System.String,System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:VISABConnector.Http.RequestHandlerBase.BuildParameterizedUrl(System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Builds a parametrized url from the given query parameters.
             </summary>
@@ -384,12 +435,12 @@
         </member>
         <member name="M:VISABConnector.Http.RequestHandlerBase.GetResponseContentAsync(System.Net.Http.HttpResponseMessage)">
             <summary>
-            Reads the content from a HttpResponseMessage.
+            Reads the content of a HttpResponseMessage.
             </summary>
             <param name="httpResponse">The HttpResponseMessage to read the content from</param>
             <returns>The content as a string, empty string if content was null</returns>
         </member>
-        <member name="M:VISABConnector.Http.RequestHandlerBase.PrepareRequest(System.Net.Http.HttpMethod,System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+        <member name="M:VISABConnector.Http.RequestHandlerBase.PrepareRequest(System.Net.Http.HttpMethod,System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
             <summary>
             Builds a HttpRequestMessage object.
             </summary>
@@ -404,20 +455,19 @@
         </member>
         <member name="M:VISABConnector.Http.VISABRequestHandler.#ctor(System.String,System.Int32)">
             <summary>
-            Initializes a VISABRequestHandler object.
             </summary>
             <param name="baseAdress">The base adress of the VISAB WebApi</param>
             <param name="requestTimeout">The time in seconds until requests are timeouted</param>
         </member>
         <member name="T:VISABConnector.IgnorePropertyContractResolver`1">
             <summary>
-            Contract resolver that doesn't serialize properties decorated with attributes of type T.
+            Contract resolver that doesnt serialize properties decorated with attributes of type T.
             </summary>
             <typeparam name="T">The attribute type to ignore</typeparam>
         </member>
         <member name="T:VISABConnector.IMetaInformation">
             <summary>
-            The interface that all classes used for sending meta information have to implement. This
+            The interface that all classes representing meta information have to implement. This
             information is required upon opening the session.
             </summary>
         </member>
@@ -426,9 +476,9 @@
             The game of which data will be sent.
             </summary>
         </member>
-        <member name="T:VISABConnector.IVISABStatistics">
+        <member name="T:VISABConnector.IStatistics">
             <summary>
-            The marker interface that all classes used for sending statistics have to implement.
+            The marker interface that all classes representing statistics have to implement.
             </summary>
         </member>
         <member name="T:VISABConnector.VISABApi">
@@ -437,27 +487,27 @@
             the VISAB WebApi.
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.EndpointGameSupported">
+        <member name="F:VISABConnector.VISABApi._endpointGameSupported">
             <summary>
             Relative endpoint for checking useability for current game in VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.EndpointListSessions">
+        <member name="F:VISABConnector.VISABApi._endpointListSessions">
             <summary>
             Relative endpoints for listing the currently active sessions in VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.EndpointOpenSession">
+        <member name="F:VISABConnector.VISABApi._endpointOpenSession">
             <summary>
             Relative endpoint for opening session to VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.EndpointPing">
+        <member name="F:VISABConnector.VISABApi._endpointPing">
             <summary>
             Relative endpoint for ping testing the VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABApi.EndpointSessionStatus">
+        <member name="F:VISABConnector.VISABApi._endpointSessionStatus">
             <summary>
             Relative endpoints for checking session status in VISAB API
             </summary>
@@ -471,7 +521,7 @@
         </member>
         <member name="P:VISABConnector.VISABApi.ConnectorVersion">
             <summary>
-            The current Version of the VISABConnector dll.
+            The current assembly version of the VISABConnector dll.
             </summary>
         </member>
         <member name="P:VISABConnector.VISABApi.BaseAdress">
@@ -499,67 +549,71 @@
             Request handler used for making Http requests that are independant of sessions.
             </summary>
         </member>
-        <member name="M:VISABConnector.VISABApi.StartVISAB(System.String)">
+        <member name="M:VISABConnector.VISABApi.GameIsSupportedAsync(System.String)">
             <summary>
-            Starts the VISAB jar
-            </summary>
-            <param name="pathToVisab">The path to the jar file</param>
-        </member>
-        <member name="M:VISABConnector.VISABApi.GameIsSupported(System.String)">
-            <summary>
-            Indicates if the VISAB WebApi can receive data for the given game.
+            Checks if the VISAB WebApi can receive data for the given game.
             </summary>
             <param name="game">The game to check</param>
-            <returns>Content is true if game is supported, false else</returns>
+            <returns>An ApiResponse object with Content set to true if game is supported</returns>
         </member>
-        <member name="M:VISABConnector.VISABApi.GetActiveSessions">
+        <member name="M:VISABConnector.VISABApi.GetActiveSessionsAsync">
             <summary>
-            Returns a list of the sessionIds for all active sessions.
+            Returns a list of all the sessionIds for all active sessions.
             </summary>
-            <returns>A list of the sessionIds for all active sessions</returns>
+            <returns>
+            An ApiResponse object whose content contains a list of the sessionIds for all active
+            sessions if successful
+            </returns>
         </member>
         <member name="M:VISABConnector.VISABApi.GetSessionStatus(System.Guid)">
             <summary>
             Gets the session status of for a given sessionId.
-            TODO: Should have pojo that visab has here also.
             </summary>
-            <param name="sessionId">The sessionId to check</param>
-            <returns></returns>
+            <param name="sessionId">The sessionId to get the status for</param>
+            <returns>An ApiResponse object containing a SessionStatus object as Content if succesful</returns>
         </member>
-        <member name="M:VISABConnector.VISABApi.InitiateSession(VISABConnector.IMetaInformation)">
+        <member name="M:VISABConnector.VISABApi.InitiateSessionAsync(VISABConnector.IMetaInformation)">
             <summary>
-            Creates a IVISABSession object and opens a transmission session at the VISAB WebApi.
+            Creates a IVISABSession object by opening a transmission session at the VISAB WebApi.
             </summary>
             <param name="metaInformation">The meta information for the session to open</param>
-            <returns>An APIResponse object containing a IVISABSession if session was created</returns>
+            <returns>An ApiResponse object containing a IVISABSession if session was created</returns>
         </member>
-        <member name="M:VISABConnector.VISABApi.IsApiReachable">
+        <member name="M:VISABConnector.VISABApi.PingApiAsync">
             <summary>
             Indicates if the VISAB WebApi is running. If the request was successful, it is running.
             </summary>
-            <returns>An ApiResponse object</returns>
+            <returns>
+            An ApiResponse object whose content contains the response message if request was successful
+            </returns>
         </member>
         <member name="T:VISABConnector.VISABSession">
             <inheritdoc cref="T:VISABConnector.IVISABSession"/>
         </member>
-        <member name="F:VISABConnector.VISABSession.EndpointCloseSession">
+        <member name="F:VISABConnector.VISABSession._endpointCloseSession">
             <summary>
             Relative endpoint for closing session to VISAB API
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABSession.EndpointGetFile">
+        <member name="F:VISABConnector.VISABSession._endpointGetFile">
             <summary>
             Relative endpoint for getting the created file at VISAB Api.
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABSession.EndpointSendImage">
+        <member name="F:VISABConnector.VISABSession._endpointSendImage">
             <summary>
             Relative endpoint for sending images to VISAB API.
             </summary>
         </member>
-        <member name="F:VISABConnector.VISABSession.EndpointSendStatistics">
+        <member name="F:VISABConnector.VISABSession._endpointSendStatistics">
             <summary>
             Relative endpoint for sending statistics to VISAB API
+            </summary>
+        </member>
+        <member name="F:VISABConnector.VISABSession._sessionAlreadyClosedResponse">
+            <summary>
+            If a response message when sending images or statistics returned this, the session was
+            already closed.
             </summary>
         </member>
         <member name="M:VISABConnector.VISABSession.#ctor(System.String,System.Guid,VISABConnector.IVISABRequestHandler)">

@@ -79,8 +79,6 @@ public class GameManager : MonoBehaviour
      */
     private void Awake()
     {
-        Time.timeScale = 5;
-
         endTurnBtn.interactable = false;
         rollDiceBtn.interactable = false;
     }
@@ -159,10 +157,6 @@ public class GameManager : MonoBehaviour
             map.cityBuildPlaces.Add(cityPlace.GetComponent<BuildCity>().cityPlace);
         }
 
-        Time.timeScale = 20;
-
-        UnityEngine.Debug.Log(LayerMask.NameToLayer("ashkfj"));
-
         // VISAB
         SetGameInformation();
 
@@ -171,7 +165,9 @@ public class GameManager : MonoBehaviour
         var metaInformation = VISABHelper.GetMetaInformation();
         RoundBasedSession.StartSessionAsync(metaInformation, VISABHelper.HostAdress, VISABHelper.Port, VISABHelper.RequestTimeout).Wait();
 
-        VISABHelper.MakeSnapshots();
+        var images = VISABHelper.MakeSnapshots();
+        RoundBasedSession.SendImagesAsync(images).Wait();
+
 
         //Nun kann der erste Zug von Spieler 1 ausgeführt werden
         activePlayer.FirstTurn();

@@ -4,7 +4,7 @@ using VISABConnector;
 
 namespace Assets.Scripts.VISAB.Model
 {
-    public class VISABStatistics : IVISABStatistics
+    public class VISABStatistics : IStatistics
     {
         public int Turn { get; set; }
 

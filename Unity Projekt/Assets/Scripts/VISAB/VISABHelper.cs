@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VISABConnector;
 using VISABConnector.Unity;
 
@@ -62,7 +61,6 @@ namespace Assets.Scripts.VISAB
                 VictoryPoints = player.victoryPoints,
                 IsMyTurn = gameInformation.ActivePlayer == player,
                 ResourcesGained = player.GainedResources,
-                VillageResourcesGained = player.VillageGainedResources
             };
         }
 
@@ -74,8 +72,8 @@ namespace Assets.Scripts.VISAB
                 var position = gameObject.transform.position;
                 var vector2Pos = new Model.Vector2
                 {
-                    X = (int)position.x,
-                    Y = (int)position.z
+                    X = (double)position.x,
+                    Y = (double)position.z
                 };
                 list.Add(vector2Pos);
             }
@@ -122,19 +120,16 @@ namespace Assets.Scripts.VISAB
                 InstantiationSettings = new InstantiationConfiguration
                 {
                     SpawnLocation = new Vector3(100, 100, 100),
-                    PrefabPath = prefabPath
+                    PrefabPath = prefabPath,
+                    SpawnRotation = new Vector3(0, 0, 0)
                 },
                 CameraConfiguration = new CameraConfiguration
                 {
-                    CameraOffset = .5f,
+                    CameraOffset = 1f,
                     Orthographic = false,
+                    CameraRotation = new Vector3(90, 0, 0)
                 }
             };
-
-            var images = new VISABImageContainer();
-            var city = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/City"));
-            var street = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/Road"));
-            var village = ImageCreator.TakeSnapshot(defaultInstantiate("Prefabs/Village"));
 
             var mapConfig = new SnapshotConfiguration
             {
@@ -142,25 +137,45 @@ namespace Assets.Scripts.VISAB
                 {
                     CameraOffset = 0.1f,
                     Orthographic = true,
-                    OrthographicSize = 5
+                    OrthographicSize = 5,
+                    CameraRotation = new Vector3(90, 180, 0)
                 },
                 GameObjectId = "Map",
                 ImageHeight = 1024,
-                ImageWidth = 1024
+                ImageWidth = 1024,
             };
+
             var map = ImageCreator.TakeSnapshot(mapConfig);
 
-            File.WriteAllBytes("map.png", map);
+            var cityConfig = defaultInstantiate("Prefabs/City");
+            cityConfig.CameraConfiguration.CameraOffset = 1.5f;
+            var city = ImageCreator.TakeSnapshot(cityConfig);
 
-            images.CityImage = city;
-            images.StreetImage = street;
-            images.VillageImage = village;
+            var streetConfig = defaultInstantiate("Prefabs/Road");
+            streetConfig.CameraConfiguration.CameraOffset = 2f;
+            var street = ImageCreator.TakeSnapshot(streetConfig);
 
-            Debug.Log(JsonConvert.SerializeObject(images));
+            var villageConfig = defaultInstantiate("Prefabs/Village");
+            villageConfig.CameraConfiguration.CameraOffset = 1.75f;
+            var village = ImageCreator.TakeSnapshot(villageConfig);
 
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
+            var images = new VISABImageContainer
+            {
+                CityImage = city,
+                CityAnnotation = "C",
+                StreetImage = street,
+                StreetAnnotation = "S",
+                VillageImage = village,
+                VillageAnnotation = "V",
+                MapImage = map
+            };
+
+#if UNITY_EDITOR
+            File.WriteAllBytes("Snapshots/map.png", map);
+            File.WriteAllBytes("Snapshots/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
+            File.WriteAllBytes("Snapshots/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
+            File.WriteAllBytes("Snapshots/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
+#endif
 
             return images;
         }
@@ -170,12 +185,12 @@ namespace Assets.Scripts.VISAB
             var map = GameObject.Find("Map");
 
             var bounds = map.GetBoundsWithChildren();
-            var anchorPoint = new Model.Vector2 { X = (int)bounds.min.x, Y = (int)bounds.min.z };
+            var anchorPoint = new Model.Vector2 { X = (double)bounds.min.x, Y = (double)bounds.min.z };
 
             return new MapRectangle
             {
-                Height = (int)bounds.size.z,
-                Width = (int)bounds.size.x,
+                Height = (double)bounds.size.z,
+                Width = (double)bounds.size.x,
                 TopLeftAnchorPoint = anchorPoint
             };
         }
@@ -193,6 +208,7 @@ namespace Assets.Scripts.VISAB
                     bounds.Encapsulate(renderers[i].bounds);
                 }
             }
+
             return bounds;
         }
     }
