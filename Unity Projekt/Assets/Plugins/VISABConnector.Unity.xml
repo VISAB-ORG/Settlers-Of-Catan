@@ -4,29 +4,133 @@
         <name>VISABConnector.Unity</name>
     </assembly>
     <members>
+        <member name="T:VISABConnector.Unity.CameraConfiguration">
+            <summary>
+            Class that unites the settings for the snapshot camera
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.CameraConfiguration.CameraOffset">
+            <summary>
+            If you want to adjust the distance between the camera and the object to be captured use this property
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.CameraConfiguration.UseAbsoluteOffset">
+            <summary>
+            Uses the absolute offset without considering the game objects bounds
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.CameraConfiguration.CameraRotation">
+            <summary>
+            If you want to adjust the camera's rotation use this property
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.CameraConfiguration.Orthographic">
+            <summary>
+            In case you want to switch between 'perspective' view and 'orthographic' view
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.CameraConfiguration.OrthographicSize">
+            <summary>
+            In case 'orthographic' is true, one may need to adjust the camera's panel size
+            </summary>
+        </member>
         <member name="F:VISABConnector.Unity.CameraCreator.CameraName">
             <summary>
             The name of the camera that is created by us, if no camera is given.
             </summary>
         </member>
+        <member name="M:VISABConnector.Unity.CameraCreator.CreateCamera">
+            <summary>
+            Creates the camera that will be used for snapshotting the game objects
+            </summary>
+            <returns>Returns the created camera</returns>
+        </member>
+        <member name="T:VISABConnector.Unity.ChildConfiguration">
+            <summary>
+            Class that contains the settings for game objects that contain child objects that need to be snapshotted
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.ChildConfiguration.ChildName">
+            <summary>
+            The child gameobject name
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.ChildConfiguration.SnapAllChilds">
+            <summary>
+            If you want to center the cam only on one child but still want to snap all of its connected gameobjects (parents,
+            siblings) set this to true
+            </summary>
+        </member>
+        <member name="T:VISABConnector.Unity.UnityExtensionMethods">
+            <summary>
+            Extension methods that do the actual snapshotting work
+            </summary>
+        </member>
+        <member name="M:VISABConnector.Unity.UnityExtensionMethods.GetBoundsWithChildren(UnityEngine.GameObject)">
+            <summary>
+            Returns the bounds of the gameobject including all of its children
+            </summary>
+            <param name="gameObject">The gameobject that is supposed to be snapped</param>
+            <returns>The object's bounds</returns>
+        </member>
+        <member name="M:VISABConnector.Unity.UnityExtensionMethods.FocusOnAbsolute(UnityEngine.Camera,UnityEngine.GameObject,System.Single,UnityEngine.Vector3)">
+            <summary>
+            Positions the camera exactly centered onto the according game object. But does not consider the object's bounds to
+            determine the offset, rather the given parameter absoluteYOffset.
+            </summary>
+            <param name="cam">The snapshot cam</param>
+            <param name="obj">The game object to be snapped</param>
+            <param name="absoluteYOffset">The distance between object and camera</param>
+            <param name="rotationAngle">The camera's rotation</param>
+        </member>
+        <member name="M:VISABConnector.Unity.UnityExtensionMethods.FocusOn(UnityEngine.Camera,UnityEngine.GameObject,System.Single,UnityEngine.Vector3)">
+            <summary>
+            Positions the camera over the gamobject
+            </summary>
+            <param name="cam">The snapshot cam</param>
+            <param name="focusedObject">The game object to be snapped</param>
+            <param name="marginPercentage">Adjusts the distance between object and camera</param>
+            <param name="rotationAngle">The camera's rotation</param>
+        </member>
+        <member name="M:VISABConnector.Unity.UnityExtensionMethods.CenterOn(UnityEngine.Camera,UnityEngine.GameObject)">
+            <summary>
+            Test method that centers the camera over the gameobject and makes it look at it. For testing purposes only.
+            </summary>
+            <param name="cam"></param>
+            <param name="obj"></param>
+        </member>
         <member name="T:VISABConnector.Unity.ImageCreator">
             <summary>
-            TODO: Smart Instantiate
+            Class that unifies the methods in order to be able to snapshot any game item out of unity
+            </summary>
+        </member>
+        <member name="F:VISABConnector.Unity.ImageCreator.VISABLayerName">
+            <summary>
+            The VISAB layer variable which is assigned to every game object that will be snapshotted
             </summary>
         </member>
         <member name="M:VISABConnector.Unity.ImageCreator.TakeSnapshot(VISABConnector.Unity.SnapshotConfiguration)">
             <summary>
-            TODO: A bunch of dumb arguments checking TODO: You may also pass an existing camera.
+            The actual method that conducts the snapshotting of game objects. It is calibrated by passing a config object to it
             </summary>
-            <param name="config"></param>
+            <param name="config">The config object that handles the specific requirements for snapping certain game objects</param>
+            <returns>A byte array which can be converted to a PNG-file or inserted into a JSON-File</returns>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.MakeTexture(UnityEngine.Camera,System.Int32,System.Int32)">
+            <summary>
+            Creates a texture on which the game object's snapshot will be copied to
+            </summary>
+            <param name="camera"></param>
+            <param name="width"></param>
+            <param name="height"></param>
             <returns></returns>
         </member>
         <member name="M:VISABConnector.Unity.ImageCreator.TakeSnapshots(System.Collections.Generic.IEnumerable{VISABConnector.Unity.SnapshotConfiguration})">
             <summary>
-            TODO: You may also pass an existing camera.
+            Conduct several snapshots at once
             </summary>
-            <param name="configs"></param>
-            <returns></returns>
+            <param name="configs">The config objects you will need for the snapshots</param>
+            <returns>A dictionary which contains the byte arrays with their respective configuration objects</returns>
         </member>
         <member name="M:VISABConnector.Unity.ImageCreator.InstantiateGameObject(VISABConnector.Unity.InstantiationConfiguration)">
             <summary>
@@ -37,14 +141,104 @@
         </member>
         <member name="M:VISABConnector.Unity.ImageCreator.SetLayerRecursively(UnityEngine.GameObject,System.Int32)">
             <summary>
-            Assigns Layer to all children of gameobjects
+            Assigns Layer to all children of gameobject
             </summary>
             <param name="obj"></param>
             <param name="layer"></param>
         </member>
-        <member name="M:VISABConnector.Unity.SnapshotConfiguration.#ctor">
+        <member name="M:VISABConnector.Unity.ImageCreator.ChangeLayer(UnityEngine.GameObject,VISABConnector.Unity.SnapshotConfiguration,System.Int32)">
             <summary>
-            TODO: Really not name? GameObject.Find has a parameter with name that is used by us
+            Assigns layer to just child or parent (hence all children)
+            </summary>
+            <param name="obj"></param>
+            <param name="config"></param>
+            <param name="layer"></param>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.CameraSetup(VISABConnector.Unity.CameraConfiguration,System.String,UnityEngine.CameraClearFlags)">
+            <summary>
+            Creates and sets up camera accordingly
+            </summary>
+            <param name="camConfig"></param>
+            <param name="cullingLayer"></param>
+            <param name="clearFlags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VISABConnector.Unity.ImageCreator.GameObjectSetup(VISABConnector.Unity.SnapshotConfiguration)">
+            <summary>
+            Instantiates or grabs Game Object and/or its child object
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VISABConnector.Unity.InstantiationConfiguration">
+            <summary>
+            Contains the configuration settings for gameobjects that need to be instantiated before being snapshotted
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.InstantiationConfiguration.SpawnLocation">
+            <summary>
+            Location where gameobject will be instantiated
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.InstantiationConfiguration.SpawnRotation">
+            <summary>
+            In case you want to rotate the gameobject
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.InstantiationConfiguration.PrefabPath">
+            <summary>
+            Contains the prefab path in case you want to instantiate a prefab
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.InstantiationConfiguration.AfterInstantiation">
+            <summary>
+            Actions that will be invoked after after the gameobject was successfully instantiated.
+            </summary>
+        </member>
+        <member name="T:VISABConnector.Unity.SnapshotConfiguration">
+            <summary>
+            Configuration class that contains the relevant properties for snapshotting a gameobject
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.InstantiationSettings">
+            <summary>
+            Contains several settings that can affect objects that will be instantiated
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.CameraConfiguration">
+            <summary>
+            Contains several settings that adjust the camera that is used for snapshotting
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.ChildConfiguration">
+            <summary>
+            Contains several settings that apply for game objects that contain multiple child objects (and you only want to
+            snapshot a certain child)
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.GameObjectId">
+            <summary>
+            If gameobject does not need to be instantiated, this property contains its name tag
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.ImageWidth">
+            <summary>
+            Output image width
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.ImageHeight">
+            <summary>
+            Output image height
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.HasChildComponents">
+            <summary>
+            Boolean property that sets its value depending on if ChildConfiguration is available or not
+            </summary>
+        </member>
+        <member name="P:VISABConnector.Unity.SnapshotConfiguration.ShouldInstantiate">
+            <summary>
+            Boolean property that sets its value depending on if InstantiationSettings is available or not
             </summary>
         </member>
     </members>

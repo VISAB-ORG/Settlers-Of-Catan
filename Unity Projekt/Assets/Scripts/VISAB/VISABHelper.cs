@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VISABConnector;
 using VISABConnector.Unity;
 
@@ -171,10 +170,12 @@ namespace Assets.Scripts.VISAB
                 MapImage = map
             };
 
-            File.WriteAllBytes("map.png", map);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
-            File.WriteAllBytes(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
+#if UNITY_EDITOR
+            File.WriteAllBytes("Snapshots/map.png", map);
+            File.WriteAllBytes("Snapshots/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "city") + ".png", city);
+            File.WriteAllBytes("Snapshots/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "street") + ".png", street);
+            File.WriteAllBytes("Snapshots/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss" + "village") + ".png", village);
+#endif
 
             return images;
         }
